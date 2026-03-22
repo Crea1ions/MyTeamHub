@@ -27,6 +27,15 @@ jobs:
         run: |
           cd server
           npm test
+      - name: Run coverage (enforces thresholds)
+        run: |
+          cd server
+          npm run coverage
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-coverage
+          path: coverage/server
       - name: Run npm audit
         run: |
           cd server

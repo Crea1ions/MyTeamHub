@@ -7,6 +7,7 @@
     "start": "node index.js",
     "dev": "NODE_ENV=development node index.js",
     "test": "jest --runInBand",
+    "coverage": "jest --coverage --runInBand",
     "lint": "eslint . --ext .js",
     "format": "prettier --write ."
   },
@@ -25,5 +26,19 @@
     "supertest": "^6.3.3",
     "eslint": "^8.47.0",
     "prettier": "^3.5.0"
+  }
+  ,
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": false,
+    "coverageDirectory": "../coverage/server",
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
   }
 }
