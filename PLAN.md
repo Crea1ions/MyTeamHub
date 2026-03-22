@@ -473,3 +473,365 @@ Ce projet repose sur 3 piliers :
 
 🔒 contrôle
 → utilisateur maître
+
+🎯 OpenClaw Orchestrator — MyTeamHub (v2+)
+🧠 SYNTHÈSE
+
+OpenClaw devient un routeur intelligent multi-skills avec isolation stricte des responsabilités.
+
+Chaque skill est :
+
+indépendant
+
+testable
+
+extensible
+
+Skill	Rôle
+normal	conversation générale
+dev	assistance technique
+myteam	orchestration multi-agents
+
+👉 Objectif clé : éviter toute contamination de contexte entre modes
+
+🧩 ÉVOLUTION MAJEURE — MODES MYTEAM
+🎯 Introduction d’une couche stratégique
+
+MyTeamHub supporte désormais 2 modes complémentaires :
+
+Mode	Objectif	Output
+🧠 incubateur	Explorer & structurer une idée	Fiche concept
+🛠️ editeur	Planifier & exécuter	Plan d’implémentation
+🔥 Impact produit
+
+👉 Passage de :
+
+outil de réflexion
+→ système complet de production (idée → exécution)
+
+🧠 ARCHITECTURE GLOBALE (V2+)
+[ Client / Telegram / UI ]
+            ↓
+     [ OpenClaw Router ]
+            ↓
+ ┌───────────────┬───────────────┬───────────────┐
+ |   normal      |      dev      |    myteam     |
+ └───────────────┴───────────────┴───────────────┘
+                                      ↓
+                             [ Mode Resolver ]
+                                      ↓
+                 ┌───────────────────────────────┐
+                 |                               |
+     [ Incubateur Orchestrator ]     [ Editeur Orchestrator ]
+                 |                               |
+                 └───────────────┬───────────────┘
+                                 ↓
+                        [ MyTeamHub API ]
+                                 ↓
+                        [ Agents spécialisés ]
+🧩 DESIGN DU SKILL /myteam
+🔹 Activation
+/myteam ...
+
+Sinon :
+→ fallback automatique vers normal
+
+🔹 Contrat
+Côté	Responsabilité
+OpenClaw	stateless
+MyTeamHub	stateful
+
+👉 séparation critique confirmée dans ton système actuel
+
+🧠 ÉTAPE 1 — ROUTAGE ROBUSTE
+function routeMessage(message) {
+ if (!message) return handleNormal('');
+
+ const trimmed = message.trim();
+
+ if (trimmed.startsWith('/myteam')) {
+ return handleMyTeam(trimmed);
+ }
+
+ return handleNormal(trimmed);
+}
+✅ Garanties
+
+isolation stricte
+
+extensibilité
+
+fallback safe
+
+🧠 ÉTAPE 2 — PARSING & MODE RESOLUTION
+🎯 Format enrichi
+/myteam project:vaultkeeper mode:incubateur
+/myteam project:vaultkeeper mode:editeur
+✅ Parser
+function parseMyTeamCommand(input) {
+ const params = {};
+ const regex = /(\w+):([^\s]+)/g;
+
+ let match;
+ while ((match = regex.exec(input)) !== null) {
+ params[match[1]] = match[2];
+ }
+
+ const message = input.replace(/\/myteam[^\n]*\s?/, '');
+
+ return {
+ projectId: params.project || null,
+ mode: params.mode || 'incubateur',
+ message: message.trim()
+ };
+}
+🧠 Mode Resolver
+function resolveMode(mode) {
+ if (mode === 'editeur') return 'editeur';
+ return 'incubateur';
+}
+🧠 ÉTAPE 3 — ORCHESTRATION PAR MODE
+🧠 MODE 1 — INCUBATEUR
+🎯 Objectif
+
+Explorer → challenger → structurer
+
+🔁 Pipeline
+['reveur', 'ingenieur', 'diablotin']
+📤 Output
+# 💡 Fiche Concept
+
+## 🌟 Vision
+...
+
+## ✨ Fonctionnalités
+...
+
+## 👤 Valeur utilisateur
+...
+
+## ⚠️ Risques
+...
+
+## 🚀 Opportunités
+...
+🛠️ MODE 2 — ÉDITEUR
+🎯 Objectif
+
+Transformer en plan exécutable validable
+
+🔁 Pipeline
+['ingenieur', 'diablotin', 'artisan']
+📤 Output (critique)
+# 🛠️ Plan d’implémentation
+
+## 🎯 Objectif
+...
+
+## 📦 Scope (MVP)
+...
+
+## 🧩 Étapes techniques
+1. ...
+2. ...
+
+## 🔗 Dépendances
+...
+
+## ⏱️ Estimation
+...
+
+## ⚠️ Risques
+...
+
+## ✅ Validation requise
+🔁 FLOW CRITIQUE — MODE ÉDITEUR
+User → /myteam mode:editeur
+↓
+Orchestration agents
+↓
+Plan généré
+↓
+📩 Envoi Telegram
+↓
+⏸️ Attente validation utilisateur
+↓
+Execution OpenClaw
+↓
+Résultat final
+🔒 Règle absolue
+if (mode === 'editeur' && !userConfirmed) {
+ return sendPlanForValidation();
+}
+
+👉 pas d’exécution sans validation
+
+🧠 ÉTAPE 4 — ORCHESTRATION INTELLIGENTE
+❌ V1
+
+Flow fixe
+
+✅ V2 (context-aware)
+function selectAgentsByMode(mode, message) {
+ if (mode === 'incubateur') {
+ return ['reveur', 'ingenieur', 'diablotin'];
+ }
+
+ if (mode === 'editeur') {
+ return ['ingenieur', 'diablotin', 'artisan'];
+ }
+
+ return ['ingenieur'];
+}
+🧠 ÉTAPE 5 — API LAYER
+async function callMyTeam({ projectId, agent, message }) {
+ const controller = new AbortController();
+ const timeout = setTimeout(() => controller.abort(), 8000);
+
+ try {
+ const res = await fetch('http://localhost:3001/api/chat', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ projectId,
+ promptFile: `${agent}.md`,
+ message
+ }),
+ signal: controller.signal
+ });
+
+ return await res.json();
+ } finally {
+ clearTimeout(timeout);
+ }
+}
+🧠 ÉTAPE 6 — SYNTHÈSE
+Format unifié
+🧠 Analyse :
+...
+
+🔁 Agents utilisés :
+...
+
+⚙️ Étapes :
+...
+
+✅ Résultat :
+...
+🔒 SÉCURITÉ & LIMITES
+
+max 3 agents
+
+max 8s / appel
+
+max 1500 chars input
+
+max 4000 chars output
+
+🛡️ Fail-safe
+
+timeout → skip
+
+erreur → réponse partielle
+
+aucun agent → fallback direct
+
+🧠 MÉMOIRE
+Élément	Responsable
+contexte	MyTeamHub
+sessions	MyTeamHub
+orchestration	OpenClaw
+
+👉 OpenClaw = stateless brain
+
+⚡ POINTS FORTS
+✅ Architecture modulaire
+✅ Séparation exploration / exécution
+✅ Contrôle humain intégré
+✅ Multi-agents spécialisés
+✅ Local-first (confirmé README)
+⚠️ RISQUES
+🔴 Orchestrateur = SPOF logique
+🔴 Latence multi-agents
+🔴 File system scaling
+🔴 Manque d’observabilité
+🚀 ROADMAP
+Phase 1 (actuelle)
+
+orchestration dynamique
+
+modes incubateur / éditeur
+
+Phase 2
+
+scoring réponses
+
+parallélisation agents
+
+cache
+
+Phase 3
+
+débat agents (ping-pong)
+
+convergence automatique
+
+UI monitoring
+
+Phase 4 (scale)
+
+microservices agents
+
+queue system
+
+stockage distribué
+
+🎯 UX FINALE
+🧠 Incubateur
+/myteam project:vaultkeeper mode:incubateur
+
+👉 fiche concept
+
+🛠️ Éditeur
+/myteam project:vaultkeeper mode:editeur
+
+👉 plan → validation → exécution
+
+🧠 POSITIONNEMENT STRATÉGIQUE
+
+Tu ne construis pas un chatbot.
+
+👉 Tu construis :
+
+un système d’intelligence collective orchestrée
+
+Capable de :
+
+générer des idées
+
+les challenger
+
+les transformer
+
+les exécuter
+
+🏁 CONCLUSION
+
+MyTeamHub = mémoire + agents
+OpenClaw = orchestration + contrôle
+
+👉 Ensemble :
+
+une plateforme complète de production d’idées et de software
+
+🧠 TL;DR CTO
+
+👉 L’ajout des modes est le pivot clé :
+
+clarifie les usages
+
+structure le pipeline
+
+sécurise l’exécution
+
+prépare l’automatisation

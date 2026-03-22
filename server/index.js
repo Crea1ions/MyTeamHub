@@ -21,7 +21,8 @@ app.use('/api/proxy', require('./routes/proxy'));
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, '0.0.0.0', () => {
+// Bind only to the WireGuard IP (wg0) for internal-only access
+app.listen(PORT, '10.0.0.1', () => {
   console.log(`MyTeam Hub running on ${PORT}`);
-  console.log(`UI available at: http://10.0.0.2:${PORT}/`);
+  console.log(`UI available on WireGuard at: http://10.0.0.1:${PORT}/`);
 });
