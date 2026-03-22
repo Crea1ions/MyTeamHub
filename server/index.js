@@ -1,16 +1,20 @@
 const express = require('express');
-const path = require('path');
+const nodePath = require('path');
 require('dotenv').config();
 const app = express();
 
 app.use(express.json());
 
+// API auth middleware (protect /api/*). See server/middleware/auth.js
+const apiAuth = require('./middleware/auth');
+app.use('/api', apiAuth);
+
 // Static UI files (served via Wireguard VPN)
-app.use(express.static(path.join(__dirname, '../ui')));
+app.use(express.static(nodePath.join(__dirname, '../ui')));
 
 // Redirect root to UI
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../ui/index.html'));
+  res.sendFile(nodePath.join(__dirname, '../ui/index.html'));
 });
 
 // API Routes

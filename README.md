@@ -86,6 +86,12 @@ Pour protéger `main` (recommandé même en solo) :
 
 Remarque : en solo, vous pouvez garder la protection légère (exiger uniquement le statut CI) pour éviter de fusionner du code cassé.
 
+## Integration test note
+
+- The integration test that exercises the OpenClaw handshake requires an `OPENCLAW_TOKEN` secret in CI. If the secret is not present the test suite is skipped to avoid failing PRs from forks.
+- To run the integration test in GitHub Actions set the repository secret `OPENCLAW_TOKEN` (Settings → Secrets → Actions) to a valid token with the required scopes. The workflow will also set `NODE_TLS_REJECT_UNAUTHORIZED=0` to allow the repo's self-signed test TLS proxy.
+- Locally you can run the integration test by exporting `OPENCLAW_TOKEN` before `npm test`, or omit it to skip the integration test.
+
 
 ## Sécurité et bonnes pratiques
 
