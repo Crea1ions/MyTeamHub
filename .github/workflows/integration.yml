@@ -1,0 +1,33 @@
+name: "CI - Unit and Integration Tests"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate device identity
+        run: node server/scripts/generate_device_identity.js
+
+      - name: Run tests (unit + integration)
+        env:
+          NODE_ENV: test
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+          OPENCLAW_TOKEN: ${{ secrets.OPENCLAW_TOKEN }}
+        run: npm test --silent

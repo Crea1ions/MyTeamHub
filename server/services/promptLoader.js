@@ -1,7 +1,8 @@
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
 
-const PROMPT_DIR = '/root/myteam/data/prompts';
+// prompts directory relative to repo data folder
+const PROMPT_DIR = process.env.PROMPT_DIR || nodePath.join(__dirname, '..', '..', 'data', 'prompts');
 
 async function loadPrompt(filename) {
   // Étape 2 — Sécuriser path traversal
@@ -9,7 +10,7 @@ async function loadPrompt(filename) {
     throw new Error('Invalid prompt filename');
   }
   
-  const file = path.join(PROMPT_DIR, filename);
+  const file = nodePath.join(PROMPT_DIR, filename);
   return fs.readFile(file, 'utf-8');
 }
 

@@ -34,6 +34,41 @@
       "role": "assistant",
       "content": "# 🚧 On a un problème\n\nJe vois la même question posée **2 fois** — mais **toujours pas de réponse**.\n\n## Ce qu'il me faut maintenant\n\nJ'ai besoin que tu me donnes les informations de base sur VaultKeeper :\n\n```\nRéponds à ce minimum vital :\n\n1. C'est quoi VaultKeeper ? (1 phrase)\n2. Quel problème résout-il ?\n3. Où tu en es ? (idéation / prototype / dev en cours / déjà lancé)\n4. Technologies que tu prévois d'utiliser (si tu sais)\n5. Quel est ton budget temps ? (week-end warriors / full-time / freelance)\n```\n\n---\n\n## Pourquoi je bloque\n\nMon rôle c'est de **passer à l'action**, pas de poser 36 questions.\n\n**Là, on est bloqués au même endroit depuis 3 messages.**\n\nSi tu me donnes 5 minutes de tes infos, je peux te sortir :\n- Un découpage en phases concrètes\n- Les 3 premiers livrables à construire\n- Une estimation réaliste du temps\n\n---\n\n## Option rapide\n\nSi tu n'as pas tout formalisé, balance-moi juste :\n> *\"C'est un bot de DCA avec alertes sur Telegram, je code en Python, j'ai 10h/semaine\"*\n\nEt je construis le plan d'action à partir de ça.\n\nQu'est-ce qu'on démarre ? 🎯",
       "timestamp": "2026-03-22T03:45:00.293Z"
+    },
+    {
+      "role": "user",
+      "content": "Bonjour",
+      "timestamp": "2026-03-22T21:29:58.192Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-22T21:29:58.193Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-22T21:29:58.193Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-22T21:29:58.193Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-22T21:29:58.194Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:diablotin] Réponse simulée pour diablotin",
+      "timestamp": "2026-03-22T21:29:58.194Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:artisan] Réponse simulée pour artisan",
+      "timestamp": "2026-03-22T21:29:58.194Z"
     }
   ]
 }
