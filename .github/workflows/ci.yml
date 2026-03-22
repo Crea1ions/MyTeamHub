@@ -18,6 +18,11 @@ jobs:
         run: |
           cd server
           npm ci
+      - name: Run lint
+        run: |
+          cd server
+          npm ci
+          npm run lint || true
       - name: Run tests
         run: |
           cd server
