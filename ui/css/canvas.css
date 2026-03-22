@@ -1,0 +1,95 @@
+/* Canvas - Zone centrale */
+
+/* Project Context */
+.context-display {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.context-display h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.context-content {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+}
+
+/* Session History */
+.session-history {
+    margin-top: var(--space-lg);
+}
+
+.session-message {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.session-message.user {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.message-content {
+    flex: 1;
+    max-width: 70%;
+}
+
+.message-bubble {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: var(--space-md);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.session-message.user .message-bubble {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.message-meta {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.session-message.user .message-meta {
+    justify-content: flex-end;
+}
+
+/* Thinking indicator */
+.thinking {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: italic;
+}
+
+.thinking::before {
+    content: "🤔";
+}

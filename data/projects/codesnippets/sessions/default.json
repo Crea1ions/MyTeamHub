@@ -1,0 +1,74 @@
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Je veux un outil qui me permette de générer automatiquement des snippets de code sécurisés et testés pour mes projets Node.js ou front-end, à partir d un simple prompt naturel, et qui les sauvegarde avec versioning minimal pour ne jamais perdre mes tests ou mes essais",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:diablotin] Réponse simulée pour diablotin",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:artisan] Réponse simulée pour artisan",
+      "timestamp": "2026-03-21T03:14:10.342Z"
+    },
+    {
+      "role": "user",
+      "content": "Conçois larchitecture technique complète: structure de fichiers, API endpoints, format des prompts, système de versioning minimal",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:reveur] Réponse simulée pour reveur",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "user",
+      "content": "[mock:ingenieur] Réponse simulée pour ingenieur",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:diablotin] Réponse simulée pour diablotin",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    },
+    {
+      "role": "assistant",
+      "content": "[mock:artisan] Réponse simulée pour artisan",
+      "timestamp": "2026-03-21T03:15:58.041Z"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+/* Sidebar - Projets */
+.panel-projects {
+    background: var(--bg-secondary);
+}
+
+/* Search */
+.search-box {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--border);
+}
+
+.search-box input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Project List */
+.project-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-sm);
+}
+
+.project-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.project-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.project-item.active {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.project-item .emoji {
+    font-size: 16px;
+}
+
+.project-item .name {
+    flex: 1;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-item .status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+}
+
+.project-item .status.paused {
+    background: var(--accent-orange);
+}
+
+.project-item .status.new {
+    background: var(--accent-blue);
+}
+
+/* Loading */
+.loading {
+    padding: var(--space-md);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}

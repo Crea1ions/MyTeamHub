@@ -1,0 +1,107 @@
+/* Agents Panel */
+.panel-agents {
+    background: var(--bg-secondary);
+}
+
+/* Agent List */
+.agent-list {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.agent-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.agent-card:hover {
+    border-color: var(--border);
+}
+
+.agent-card.active {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.agent-emoji {
+    font-size: 24px;
+}
+
+.agent-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.agent-info p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Agent Chat */
+.agent-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.agent-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.agent-message {
+    font-size: 12px;
+    padding: var(--space-sm);
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+.agent-message.system {
+    font-style: italic;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Input */
+.agent-input {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-top: 1px solid var(--border);
+}
+
+.agent-input input {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.agent-input input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.agent-input input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

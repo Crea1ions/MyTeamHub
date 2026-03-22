@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTeamHub</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/canvas.css">
+    <link rel="stylesheet" href="css/agents.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div id="app" class="app-layout">
+        
+        <!-- COLONNE 1: PROJETS -->
+        <aside id="panel-projects" class="panel panel-projects">
+            <header class="panel-header">
+                <h2>◇ PROJETS</h2>
+            </header>
+            
+            <div class="search-box">
+                <input type="text" id="search-projects" placeholder="Recherche...">
+            </div>
+            
+            <div id="project-list" class="project-list">
+                <!-- Projects loaded via API -->
+                <div class="loading">Chargement...</div>
+            </div>
+            
+            <footer class="panel-footer">
+                <button id="btn-new-project" class="btn-primary">+ Nouveau projet</button>
+            </footer>
+        </aside>
+        
+        <!-- COLONNE 2: CANEVAS CENTRAL -->
+        <main id="canvas" class="canvas">
+            <header class="canvas-header">
+                <h1 id="current-project-name">Sélectionner un projet</h1>
+                <div class="canvas-actions">
+                    <button class="btn-icon" title="Paramètres">⚙️</button>
+                    <button class="btn-icon" title="Exporter">📤</button>
+                </div>
+            </header>
+            
+            <div id="canvas-content" class="canvas-content">
+                <div class="canvas-empty">
+                    <p>Sélectionnez un projet pour commencer</p>
+                </div>
+            </div>
+        </main>
+        
+        <!-- COLONNE 3: AGENTS -->
+        <aside id="panel-agents" class="panel panel-agents">
+            <header class="panel-header">
+                <h2>◇ AGENTS</h2>
+            </header>
+            
+            <div class="agent-list">
+                <div class="agent-card" data-agent="reveur">
+                    <div class="agent-emoji">💭</div>
+                    <div class="agent-info">
+                        <h3>Rêveur</h3>
+                        <p>Exploration, idées</p>
+                    </div>
+                </div>
+                
+                <div class="agent-card" data-agent="ingenieur">
+                    <div class="agent-emoji">🛠️</div>
+                    <div class="agent-info">
+                        <h3>Ingénieur</h3>
+                        <p>Structure, faisabilité</p>
+                    </div>
+                </div>
+                
+                <div class="agent-card" data-agent="diablotin">
+                    <div class="agent-emoji">😈</div>
+                    <div class="agent-info">
+                        <h3>Diablotin</h3>
+                        <p>Critique, attaques</p>
+                    </div>
+                </div>
+                
+                <div class="agent-card" data-agent="artisan">
+                    <div class="agent-emoji">🏗️</div>
+                    <div class="agent-info">
+                        <h3>Artisan</h3>
+                        <p>Concrétisation</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="agent-chat">
+                <div id="agent-messages" class="agent-messages">
+                    <!-- Messages appear here -->
+                </div>
+                <div class="agent-input">
+                    <input type="text" id="message-input" placeholder="Envoyer un message..." disabled>
+                    <button id="btn-send" class="btn-send" disabled>→</button>
+                </div>
+            </div>
+        </aside>
+        
+    </div>
+    
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
