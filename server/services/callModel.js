@@ -2,10 +2,10 @@ require('dotenv').config();
 const { Anthropic } = require('@anthropic-ai/sdk');
 const axios = require('axios');
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
 const { buildPrompt } = require('./chatBuilder');
 
-const PROMPT_DIR = '/root/myteam/data/prompts';
+const PROMPT_DIR = process.env.PROMPT_DIR || nodePath.join(__dirname, '..', '..', 'data', 'prompts');
 
 /**
  * Appelle un modèle IA (Mock, MiniMax, ou OpenClaw)
@@ -17,7 +17,7 @@ async function callModel({ agent, promptFile, context, history = [], model = 'mo
   }
 
   // Charger le prompt de l'agent
-  const promptPath = path.join(PROMPT_DIR, promptFile);
+  const promptPath = nodePath.join(PROMPT_DIR, promptFile);
   let promptContent;
   
   try {
@@ -91,11 +91,14 @@ async function callMinimax(prompt, modelName = 'MiniMax-M2.5') {
  * Appelle OpenClaw local (proxy)
  */
 async function callOpenClawProxy(prompt) {
+  const token = process.env.OPENCLAW_TOKEN;
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
   const response = await axios.post('http://localhost:3001/api/proxy/openclaw', {
     message: prompt,
     model: 'minimax-m2.5'
   }, {
-    timeout: 60000
+    timeout: 60000,
+    headers
   });
 
   return response.data?.data?.message || '[empty response]';

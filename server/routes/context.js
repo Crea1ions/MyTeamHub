@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
+const { isValidProjectId } = require('../utils/sanitize');
 
-const BASE = '/root/myteam/data/projects';
+const { PROJECTS_BASE: BASE } = require('../config/paths');
 
 // GET context
 router.get('/:projectId', async (req, res) => {
-  const file = path.join(BASE, req.params.projectId, 'context.md');
+  if (!isValidProjectId(req.params.projectId)) return res.status(400).send('');
+  const file = nodePath.join(BASE, req.params.projectId, 'context.md');
 
   try {
     const content = await fs.readFile(file, 'utf-8');
@@ -18,7 +20,8 @@ router.get('/:projectId', async (req, res) => {
 
 // UPDATE context
 router.post('/:projectId', async (req, res) => {
-  const file = path.join(BASE, req.params.projectId, 'context.md');
+  if (!isValidProjectId(req.params.projectId)) return res.status(400).json({ success: false });
+  const file = nodePath.join(BASE, req.params.projectId, 'context.md');
 
   await fs.writeFile(file, req.body.content || '');
   res.json({ success: true });
