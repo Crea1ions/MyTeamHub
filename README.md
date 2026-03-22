@@ -63,6 +63,30 @@ Consultez le code dans `server/routes/*.js` pour le contrat précis.
 - Tests unitaires : Jest (fichiers dans `server/__tests__/`).
 - CI : GitHub Actions workflow `.github/workflows/ci.yml` exécute install, lint, tests et `npm audit`.
 
+### Couverture & obligations
+
+- Un job CI exécute maintenant `npm run coverage` (dans `server/`) et génère un rapport de couverture.
+- Jest a des seuils de couverture globaux définis (70% pour branches/fonctions/lignes/statements). Le job de CI échouera si ces seuils ne sont pas atteints.
+
+Exécuter la couverture localement :
+```bash
+cd server
+npm ci
+npm run coverage
+```
+
+### Protection de branche `main`
+
+Pour protéger `main` (recommandé même en solo) :
+
+1. Allez sur GitHub → Settings → Branches → Add rule
+2. Entrez `main` comme pattern
+3. Cochez : `Require status checks to pass before merging` et sélectionnez le job CI (ex: `server-tests`)
+4. Cochez `Require pull request reviews before merging` (1 reviewer) si vous voulez une étape de validation, sinon laissez décoché si vous préférez fusionner directement
+
+Remarque : en solo, vous pouvez garder la protection légère (exiger uniquement le statut CI) pour éviter de fusionner du code cassé.
+
+
 ## Sécurité et bonnes pratiques
 
 - Ne commitez jamais `server/.env` avec des vraies clés. Remplacez-les par `server/.env.example`.
