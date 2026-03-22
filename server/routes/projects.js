@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
+const { isValidProjectId } = require('../utils/sanitize');
 
-const BASE = '/root/myteam/data/projects';
+const { PROJECTS_BASE: BASE } = require('../config/paths');
 
 // CREATE
 router.post('/', async (req, res) => {
@@ -11,12 +12,15 @@ router.post('/', async (req, res) => {
   if (!name) return res.status(400).json({ error: 'name required' });
 
   const id = name.toLowerCase().replace(/\s+/g, '-');
-  const dir = path.join(BASE, id);
+  if (!isValidProjectId(id)) {
+    return res.status(400).json({ error: 'Invalid project name resulting id' });
+  }
+  const dir = nodePath.join(BASE, id);
 
   await fs.mkdir(dir, { recursive: true });
 
   // init context
-  await fs.writeFile(path.join(dir, 'context.md'), '');
+  await fs.writeFile(nodePath.join(dir, 'context.md'), '');
 
   res.json({ id, name });
 });
@@ -27,7 +31,7 @@ router.get('/', async (req, res) => {
     const entries = await fs.readdir(BASE, { withFileTypes: true });
     const projects = entries
       .filter(e => e.isDirectory())
-      .map(e => ({ id: e.name }));
+      .map(e => ({ id: e.name, name: e.name }));
     res.json(projects);
   } catch {
     res.json([]);
@@ -36,7 +40,8 @@ router.get('/', async (req, res) => {
 
 // GET one
 router.get('/:id', async (req, res) => {
-  const dir = path.join(BASE, req.params.id);
+  const dir = nodePath.join(BASE, req.params.id);
+  if (!isValidProjectId(req.params.id)) return res.status(400).json({ error: 'Invalid project id' });
   try {
     await fs.access(dir);
     res.json({ id: req.params.id });

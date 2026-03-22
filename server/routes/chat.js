@@ -1,35 +1,86 @@
 const router = require('express').Router();
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
+const { isValidProjectId } = require('../utils/sanitize');
 
 const { loadPrompt } = require('../services/promptLoader');
 const { buildPrompt } = require('../services/chatBuilder');
 const { callModel } = require('../services/callModel');
 const { orchestrateMyTeam } = require('../services/orchestrator');
 
-const BASE = '/root/myteam/data/projects';
+const { PROJECTS_BASE } = require('../config/paths');
+const BASE = PROJECTS_BASE;
 
 /**
  * POST /api/chat — Chat classique (mock ou réel)
  */
 router.post('/', async (req, res) => {
-  const { projectId, promptFile, message, model = 'mock' } = req.body;
+  let { projectId, promptFile, message, model = 'mock' } = req.body;
 
-  // Validation minimale
-  if (!projectId || !promptFile || !message) {
+  // UI should not use OpenClaw directly — map any 'openclaw' request to 'minimax'
+  if (model === 'openclaw') model = 'minimax';
+
+  // Basic validation: projectId and message always required
+  if (!projectId || !message) {
     return res.status(400).json({
       success: false,
       data: null,
-      error: 'Missing parameters: projectId, promptFile, message required'
+      error: 'Missing parameters: projectId and message required'
     });
   }
 
+  // Validate projectId format
+  if (!isValidProjectId(projectId)) {
+    return res.status(400).json({ success: false, data: null, error: 'Invalid projectId' });
+  }
+
+  // Detect /myteam command at start of message and forward to orchestrator
   try {
-    // 1. load prompt
+    const trimmed = String(message).trim();
+    if (trimmed.startsWith('/myteam')) {
+      // extract command body after '/myteam'
+      const commandBody = trimmed.replace(/^\/myteam\s*/, '').trim();
+      if (!commandBody) {
+        return res.status(400).json({
+          success: false,
+          data: null,
+          error: 'Empty /myteam command body'
+        });
+      }
+
+      const result = await orchestrateMyTeam({
+        projectId,
+        userMessage: commandBody,
+        model
+      });
+
+      return res.json({
+        success: result.success,
+        data: {
+          message: result.response,
+          model: model,
+          historyCount: result.historyCount
+        },
+        error: null
+      });
+    }
+
+    // Non-/myteam flow continues below
+
+      // If not a /myteam command, require promptFile as before
+      if (!promptFile) {
+        return res.status(400).json({
+          success: false,
+          data: null,
+          error: 'Missing parameters: promptFile required for chat'
+        });
+      }
+
+      // 1. load prompt
     const prompt = await loadPrompt(promptFile);
 
     // 2. load context
-    const contextPath = path.join(BASE, projectId, 'context.md');
+    const contextPath = nodePath.join(BASE, projectId, 'context.md');
     let context = '';
     try {
       context = await fs.readFile(contextPath, 'utf-8');
@@ -37,7 +88,7 @@ router.post('/', async (req, res) => {
 
     // 3. Charger session
     const sessionId = 'default';
-    const sessionPath = path.join(BASE, projectId, 'sessions', `${sessionId}.json`);
+    const sessionPath = nodePath.join(BASE, projectId, 'sessions', `${sessionId}.json`);
     
     let session = { messages: [] };
     try {
@@ -82,7 +133,7 @@ router.post('/', async (req, res) => {
     });
 
     // 9. Sauvegarder session
-    await fs.mkdir(path.dirname(sessionPath), { recursive: true });
+    await fs.mkdir(nodePath.dirname(sessionPath), { recursive: true });
     await fs.writeFile(sessionPath, JSON.stringify(session, null, 2));
 
     // 10. Retourner réponse
@@ -111,7 +162,10 @@ router.post('/', async (req, res) => {
  * Usage: /myteam project:vaultkeeper message
  */
 router.post('/orchestrate', async (req, res) => {
-  const { projectId, message, model = 'openclaw' } = req.body;
+  let { projectId, message, model = 'minimax' } = req.body;
+
+  // Ensure orchestrations triggered from the UI use Minimax rather than OpenClaw
+  if (model === 'openclaw') model = 'minimax';
 
   if (!projectId || !message) {
     return res.status(400).json({

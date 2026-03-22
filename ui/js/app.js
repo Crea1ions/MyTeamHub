@@ -29,16 +29,41 @@ async function apiCall(endpoint, options = {}) {
         headers: { 'Content-Type': 'application/json' },
         ...options
     });
-    return response.json();
+
+    // Safely handle empty or non-JSON responses
+    const text = await response.text();
+    if (!text) return null;
+
+    const ct = response.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.warn('[apiCall] invalid JSON response for', endpoint);
+            return null;
+        }
+    }
+
+    // Fallback: try parsing, otherwise return raw text
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        return text;
+    }
 }
 
 // Load Projects
 async function loadProjects() {
     elements.projectList.innerHTML = '<div class="loading">Chargement...</div>';
-    
+
     const data = await apiCall('/api/projects');
-    state.projects = data;
-    
+    if (!data || !Array.isArray(data)) {
+        console.warn('[loadProjects] unexpected projects payload', data);
+        state.projects = [];
+    } else {
+        state.projects = data;
+    }
+
     renderProjects();
 }
 
@@ -78,8 +103,15 @@ async function selectProject(projectId) {
     elements.projectName.textContent = state.currentProject.name;
     
     // Enable inputs
-    elements.messageInput.disabled = !state.currentAgent;
-    elements.btnSend.disabled = !state.currentAgent;
+    // If there's only one agent card, auto-select it so input becomes active
+    const agentCardsNow = document.querySelectorAll('.agent-card');
+    if (!state.currentAgent && agentCardsNow.length === 1) {
+        const onlyAgent = agentCardsNow[0].dataset.agent;
+        if (onlyAgent) selectAgent(onlyAgent);
+    }
+
+    elements.messageInput.disabled = !state.currentProject || !state.currentAgent;
+    elements.btnSend.disabled = !state.currentProject || !state.currentAgent;
     
     // Load context
     const context = await apiCall(`/api/context/${projectId}`);
@@ -120,6 +152,14 @@ function selectAgent(agentId) {
     
     if (state.currentProject) {
         elements.messageInput.focus();
+    }
+
+    // If agent cards are rendered/changed dynamically, ensure listeners attach
+    function attachAgentCardListeners() {
+        document.querySelectorAll('.agent-card').forEach(card => {
+            card.removeEventListener('click', () => selectAgent(card.dataset.agent));
+            card.addEventListener('click', () => selectAgent(card.dataset.agent));
+        });
     }
 }
 

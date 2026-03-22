@@ -474,7 +474,7 @@ Ce projet repose sur 3 piliers :
 🔒 contrôle
 → utilisateur maître
 
-🎯 OpenClaw Orchestrator — MyTeamHub (v2+)
+## 🎯 OpenClaw Orchestrator — MyTeamHub (v2+)
 🧠 SYNTHÈSE
 
 OpenClaw devient un routeur intelligent multi-skills avec isolation stricte des responsabilités.
@@ -835,3 +835,238 @@ structure le pipeline
 sécurise l’exécution
 
 prépare l’automatisation
+
+## ## Plan: OpenClaw MyTeamHub Modes (Incubateur / Éditeur) — Hardened & Operationally Safe
+
+TL;DR: Keep the stateless OpenClaw router and stateful MyTeamHub separation, but modify the plan to explicitly address the security, persistence and operational failure modes you highlighted: do an initial audit, require application-level authentication, apply strict sanitization, split persistence responsibilities (Postgres for snapshots, Redis for locks/queue), use signed tokens (JWT) instead of opaque Redis-only tokens, add worker heartbeats/health checks, and provide migration/runbooks. Only proceed to implement once those blocking conditions are satisfied.
+
+**High-level changes from previous plan (why)**
+- Add an explicit repository audit phase before any refactor to confirm file layout and debt. This prevents wrong assumptions about `server/routes/chat.js` etc.
+- Require application authentication and avoid relying solely on Wireguard.
+- Replace opaque validation tokens in Redis with signed JWTs (short TTL) to avoid token-exposure risks in logs/URLs.
+- Use Postgres for durable snapshots and Redis only for locks + task queue (reduce Redis footprint).
+- Add project-level locks, worker heartbeats, rate limiting, and migration scripts for existing `data/projects/` files.
+
+**Steps (implementation order, blocking items marked)**
+1. Audit (BLOCKER): run a quick codebase audit to confirm current entrypoints, data paths, and any in-memory state usages. Produce a short audit report listing: where routing occurs, where prompts are loaded, how projects are persisted. *Must complete before coding.*
+2. Auth (BLOCKER): add application-level auth middleware for `/api/*` (API key / bearer token or OAuth). Enforce on Telegram webhooks and any UI endpoints. Document token rotation and storage in secrets manager.
+3. Sanitization & least-privilege (BLOCKER): implement `sanitizeProjectId()` enforcing regex ^[a-zA-Z0-9_-]+$, never allow path separators. Run a prompt-templating audit to ensure placeholders are escaped.
+4. Persistence design (BLOCKER to execution features):
+   - Postgres: persist snapshots, final plan records, audit trail (immutable). Use WAL-backed durability for recovery.
+   - Redis: used only for short-lived locks, queues (Redis Streams), and rate-limiting counters. Ensure Redis HA or documented fallback (Postgres-based fallback for queue/locks if Redis unavailable).
+   - Migrate: include a `scripts/migrate_projects_to_db.js` that reads `data/projects/*` and imports canonical records into Postgres before enabling the new orchestration.
+5. Token model: issue signed JWT `validationToken` containing snapshot id + plan hash + exp. Tokens are single-use: workers will verify signature and use Postgres to mark token consumed atomically (idempotence). Do NOT send raw Redis IDs in URLs/logs.
+6. Snapshot & locking: when generating a plan, create an immutable snapshot in Postgres and acquire a short-lived Redis project lock (optional: keep lock until expiration). For simplicity: acquire a lock at plan generation that prevents context mutation until the plan expires or is executed/aborted. This avoids complex snapshot-then-verify UX loops.
+7. Validation UX: send plan with a summary and explicit confirm action. Avoid putting tokens in query params of links; prefer POST confirmation endpoints where possible. If a link is unavoidable, use one-time short-lived signed tokens and instruct proxies to not log query strings.
+8. Execution queue & workers: push validated tasks to Redis Streams; workers pop tasks, acquire lock, mark execution RUNNING in Postgres, process, then mark DONE/FAILED. Workers must heartbeat to a key; stale RUNNING tasks can be reclaimed after configurable timeout.
+9. Idempotence: use Postgres atomic state transitions (e.g., `UPDATE plans SET state = 'RUNNING' WHERE id = ? AND state = 'PENDING'`) to prevent double-execution; check the affected row count to detect races.
+10. Agent calling policy: configurable timeouts (30s default), retries with exponential backoff (3 attempts), and a simple gating rule: require all critical agents to succeed for `editeur` OR set a conservative quorum (configurable). Always surface partial results to user and block execution until resolved.
+11. Rate limiting & DOS protection: throttle plan generation per user/project, enforce global caps, and add operator alerts for unusual activity.
+12. Observability & runbooks: emit metrics (pending plans, lock contention, agent latencies), logs without secrets, health endpoints for workers and Redis/Postgres, and simple runbooks for common failures (Redis down, stuck locks, reclaiming RUNNING tasks).
+13. Testing & chaos engineering: add unit tests for sanitization and tokens; add integration tests for concurrent `/myteam` flows, double-validation, worker failover; add a small chaos test simulating Redis unavailability and worker restarts.
+
+**Concrete file targets**
+- `server/routes/chat.js` — implement centralized `routeMessage` once audit confirms location
+- `server/services/orchestrator.js` — orchestrator will be adapted after audit; ensure it uses `myteamStore` APIs rather than direct FS
+- `server/services/callModel.js` — wrap agent calls (timeout/retry)
+- `server/services/myteamStore.js` (new) — DB-backed store: Postgres for snapshots/plans; Redis for locks/queue
+- `scripts/migrate_projects_to_db.js` — migration script to import `data/projects/*` to Postgres (must be run before enabling new features)
+- `server/middleware/auth.js` — simple API key/Bearer token middleware
+- `server/middleware/rateLimit.js` — basic per-user/project throttling
+- `server/services/executionWorker.js` — worker with heartbeat and reclaim logic
+- `server/__tests__/*` — add concurrency and security tests
+
+**Key design choices & rationale**
+- Audit-first: prevents wasted work and incorrect assumptions about repo structure.
+- Postgres for durability: snapshots must survive Redis or process crashes; Postgres provides stronger guarantees.
+- Redis limited role: locks + queue + rate counters minimizes Redis attack surface and memory usage.
+- JWT signed tokens: avoid storing every token in Redis and reduce exposure risk in logs/URLs.
+- Lock-at-plan-generation: simpler UX and avoids snapshot-drift loops; acceptable given typical user flows where plan generation is followed by quick validation.
+- Worker heartbeats + reclaim: handles worker crashes and avoids permanent RUNNING locks.
+
+**Critical blocking requirements (NO-GO until implemented)**
+1. Application-level authentication for `/api/*` must be in place.
+2. `sanitizeProjectId()` must be enforced for any operation touching the filesystem or DB keys.
+3. Migration script must exist and be validated on staging before switching persistence modes.
+4. Tokens must be JWT-signed and single-use, with server-side state recorded in Postgres for idempotence verification.
+5. A Redis HA requirement or documented fallback plan if Redis is required in your environment.
+
+**Operational mitigations for failure scenarios**
+- Redis OOM / Unavailable: degrade gracefully by rejecting new plan generation with clear error and operator alert; if Redis is not available, disallow execution but allow read-only plan inspection from Postgres snapshots.
+- Worker crash: heartbeat TTL causes automatic reclaim of RUNNING tasks; operator can trigger manual reclaim via admin endpoint.
+- Token exposure: avoid tokens in logs; use short-lived JWTs and require signature validation. Postgres keeps an audit trail for every token use.
+- DOS plan generation: rate limiting + CAPTCHA for UI, API quotas for Telegram/webhook sources.
+
+**Verification matrix (minimum tests to pass before merge)**
+- Audit report created and approved.
+- Auth middleware tested (valid/invalid tokens).
+- Sanitization tests (path traversal attempts rejected).
+- Migration script tested on staging (no data loss, canonical IDs match filesystem names).
+- Concurrency test: 2 simultaneous `/myteam editeur` requests on same `projectId` → one is accepted, other receives conflict or queued.
+- Double-validation test: clicking validate twice → second attempt returns idempotent "Already executed".
+- Worker failure test: worker dies mid-execution → another worker reclaims and resumes or marks as FAILED within expected SLA.
+- Redis failure test: simulate Redis down → system rejects execution and keeps snapshots accessible.
+
+**Next steps (concrete)**
+1. Approve audit run: I will perform a quick repo scan to confirm current structure and list exact files to edit. (I can run this scan now.)
+2. After audit, I will scaffold `server/services/myteamStore.js`, `server/middleware/auth.js`, and `scripts/migrate_projects_to_db.js` as a proposal (no runtime changes until you approve).
+
+Approve the audit step and I'll scan the repository and return a short audit report plus file-level TODOs.
+
+**Deployment Transition Plan (concise)**
+1. Prechecks (dry-run): run `scripts/migrate_projects_to_db.js --dry-run` on a staging copy; verify encoding, duplicate detection, and IDs. Fail fast on any anomaly.
+2. Migration (idempotent, batched): run the migration in batches (e.g., 50 projects per transaction). Each batch: BEGIN; import; validate checksums; COMMIT. On failure, ROLLBACK and log the failed batch for manual review. The script must be resumable and idempotent (skip already-imported snapshots by canonical ID or checksum).
+3. Read-only switch: deploy new code with Postgres available but keep filesystem as authoritative source; start in `read-only-db` mode where new plans are recorded in Postgres but filesystem reads remain allowed. Monitor for errors for 24–72 hours.
+4. Cutover: once migration verified, switch to `db-first` mode: new reads/writes use Postgres; filesystem is retained as fallback but marked deprecated. Announce deprecation window (e.g., 2 weeks).
+5. Cleanup: after deprecation window, run a final migration pass and archive filesystem `data/projects/` to object storage (gzipped backups). Validate integrity and then remove write permissions.
+6. Rollback plan: if migration catastrophically fails, rollback steps include restoring Postgres snapshot from pre-migration backup and re-enabling filesystem-first mode. Always take DB backup before each migration batch.
+
+**Frontend Requirements (must-have before validation UI goes live)**
+- Validation UX: the UI must offer an explicit `Confirm Execution` action that performs a POST with the signed `validationToken` in request body (not in URL). If a web link is used from Telegram, the link must open the UI and require the user to press `Confirm` (no auto-confirm).
+- Error states: UI must present clear messages for `Lock conflict`, `Agent timeout`, `Quorum not reached`, `Pending validation`, and `Migration required`. Each message should include suggested user actions.
+- Token handling: do not render tokens in the DOM in plain text. Store tokens in memory or secure session storage; never include tokens in URLs shown to the user. Ensure tokens are redacted in copyable logs or downloadable traces.
+- Mobile/responsive: validation screens and error flows must be responsive and usable on small screens (Telegram users frequently confirm from mobile).
+- Retry & idempotence: UI must disable the `Confirm` button after click, show progress, and display a clear `Already executed` result if the token was consumed.
+- Accessibility: ensure form controls have labels, ARIA roles where appropriate, and keyboard navigation works (WCAG basic compliance).
+- Logging & telemetry: the frontend should emit events for `plan_shown`, `validation_attempt`, `validation_success`, `validation_failure` (without tokens) to backend analytics for observability.
+
+Add these two sections to the plan and mark them as required preconditions for production roll-out.
+
+**Final Preconditions (required before audit/implementation)**
+1. Minimal Postgres schema (versioned): add `scripts/migrations/001_initial_schema.sql` containing tables: `snapshots(id UUID PRIMARY KEY, project_id TEXT, plan_hash TEXT, context JSONB, created_at TIMESTAMP)`, `plans(id UUID PRIMARY KEY, snapshot_id UUID REFERENCES snapshots(id), state TEXT, validation_token_hash TEXT, created_at TIMESTAMP, executed_at TIMESTAMP)`, `audit_logs(id UUID PRIMARY KEY, plan_id UUID REFERENCES plans(id), action TEXT, metadata JSONB, created_at TIMESTAMP)`.
+2. Snapshot format: store full immutable JSONB context snapshot (prompts, agent outputs, metadata) to ensure replayability.
+3. Token storage: store SHA256 of validation token in `plans.validation_token_hash` (do not store token in clear); verify by hashing submitted token.
+4. Log redaction middleware: add Express middleware to redact `token`/`t`/`validationToken` in URLs and request bodies before logging.
+5. Two-step validation flow: use short-lived presentation token in URLs (one-time, exchanged by UI for a session token via POST), then require POST confirm with session token in body to execute. Presentation token invalidated on exchange.
+6. Queue choice & library: adopt `Bull`/`BullMQ` (Redis) for job queueing initially; document migration path to Redis Streams if needed.
+7. Defaults: lock TTL = 15 minutes, agent timeout = 30s, retries = 3 (configurable via env). Document these values in `README.md`.
+
+Mark these seven items as required preconditions in the plan. Once you confirm, I will run the repo audit and return a short report with exact files to change.
+
+## Plan en 5 Phases
+
+Contexte: découpage progressif pour limiter le risque — audit bloquant, hardening non invasif, construction parallèle (V2), migration contrôlée, puis montée en charge et observabilité.
+Phase 1 — Audit & Gates (Blocant)
+
+Objectif: valider l'état réel du codebase et franchir les préconditions de sécurité avant tout changement.
+Tâches clés: lister fichiers JS (routes/services), inventaire des IDs projects dans data/projects/, vérifier prompts, détecter usages en mémoire.
+Fichiers existants à inspecter: index.js:1, chat.js:1, orchestrator.js:1, callModel.js:1, promptLoader.js:1.
+Critères de sortie: rapport d'audit signé, aucun projectId invalide en prod (ou plan d’ajustement), accord pour poursuivre.
+Durée estimée: 1–3 jours.
+Phase 2 — Hardening non‑invasif (Phase 1 opérationnelle)
+
+Objectif: réduire les risques immédiats sans changer la logique métier.
+Tâches clés: ajouter auth middleware (API_TOKEN, fallback dev), sanitizeProjectId() (ValidationError 400), log-redaction middleware (headers + query tokens), durcir callModel (timeout 30s, retries 2, backoff 1s/2s), créer route sûre /api/chat/orchestrate-v2 qui appelle l'orchestrateur existant sans modifier sa logique.
+Files to change: modifier index.js:1 pour monter middlewares; modifier chat.js:1 et context.js:1 pour validation; modifier callModel.js:1.
+Critères de sortie: V2 retourne les mêmes résultats que V1 (tests de non‑régression), auth activé en prod documénté, tests unitaires verts.
+Durée estimée: 1–2 semaines.
+Phase 3 — Infra parallèle & V2 (sécurisé, non coupant)
+
+Objectif: déployer la stack durable parallèle (Postgres + Redis) et la V2 qui utilise myteamStore (sans écrire la production).
+Tâches clés: provision Postgres+Redis (dev/staging), créer scripts/migrations/001_initial_schema.sql, implémenter myteamStore (interface Postgres snapshots + Redis locks), implémenter route /api/v2/chat/orchestrate utilisant myteamStore, shadow mode pour comparer outputs V1 vs V2.
+Nouveaux fichiers (proposés): server/services/myteamStore.js, scripts/migrations/001_initial_schema.sql, scripts/migrate_projects_to_db.js.
+Critères de sortie: V2 en shadow mode, divergences loguées, pas d’écriture en production DB sans validation.
+Durée estimée: 2–3 semaines.
+Phase 4 — Migration contrôlée & Cutover
+
+Objectif: migrer les données de façon idempotente et basculer progressivement les utilisateurs sur V2.
+Tâches clés: migration batched (dry-run → batched import avec rollback), read-only DB mode → db-first cutover → archiver filesystem; mettre en place locks TTL (15 min), token JWT (presentation→session), sauvegardes avant chaque batch.
+Critères de sortie: migration testée en staging, métriques OK, bascule progressive réussie, runbook rollback validé.
+Durée estimée: 1–2 semaines (selon taille des données).
+Phase 5 — Workers, Queue & Observabilité (scale)
+
+Objectif: produire le système d'exécution durable et observable en production.
+Tâches clés: choisir/installer Bull/BullMQ pour la queue, implémenter executionWorker (heartbeat, reclaim), ajouter metrics (agent latencies, lock contention), UI monitoring, runbooks et tests chaos (Redis/Postgres failover).
+Critères de sortie: résilience aux pannes (reclaim), métriques et alerting opérationnels, tests de charge validés.
+Durée estimée: 2–4 semaines (itératif).
+Risques & Mitigations (transversaux)
+
+Rollback: chaque phase doit livrer avec feature-flag et script de rollback.
+Migration: migration idempotente, batch + dry-run, stockage de checkpoints.
+Auth: fallback dev et endpoint /api/health non protégé.
+Tokens: JWT courts + stockage de hash en DB pour idempotence.
+Tests: coverage d’acceptance pour l’orchestrateur (fixtures dans data/test-projects/), nettoyage avant/après tests.
+Si tu valides ce découpage en 5 phases, j’implémente immédiatement Phase 1: je commence par (A) scanner les projectId invalides, puis (B) coder les middlewares et la route /api/chat/orchestrate-v2, ajouter les tests de non‑régression, et soumettre la PR pour revue. Confirme et je lance.
+
+Voici les listes — d’abord les fichiers existants pertinents (liens vers le workspace), puis les fichiers proposés à créer.
+
+Fichiers existants (références)
+
+LICENSE
+README.md
+PLAN.md
+index.js:1
+chat.js:1
+server/routes/context.js
+server/routes/projects.js
+server/routes/proxy.js
+orchestrator.js:1
+callModel.js:1
+promptLoader.js:1
+chatBuilder.js:1
+orchestrator.test.js:1
+callModel.test.js:1
+promptLoader.test.js:1
+index.html:1
+app.js:1
+data/prompts/ (dossier existant contenant les agents .md)
+data/projects/ (stockage filesystem existant)
+Fichiers à créer / ajouter (proposés par le plan)
+
+server/middleware/auth.js
+server/middleware/logRedact.js
+server/middleware/rateLimit.js
+server/middleware/health.js (endpoint /api/health)
+server/utils/validate.js (sanitizeProjectId / ValidationError)
+server/services/myteamStore.js (Postgres snapshots + Redis locks interface)
+server/services/executionWorker.js (Bull/BullMQ worker)
+server/services/tokenUtils.js (hashing/verifying validation tokens)
+server/services/myteamStore.test.js (unit tests for store)
+server/routes/orchestrate-v2.js or augmentation de chat.js to add /api/chat/orchestrate-v2
+scripts/migrate_projects_to_db.js (idempotent, batched migration)
+scripts/migrations/001_initial_schema.sql
+server/tests/orchestrator_nonreg.test.js (non‑regression fixtures)
+server/tests/worker.test.js (worker failover tests)
+data/test-projects/ (test fixtures directory; cleaned by tests)
+README.md updates / docs: deployment variables (API_TOKEN, Redis/Postgres), defaults
+(optional later) ui/confirm.html or UI changes to implement two‑step validation flow
+
+📊 Où nous en sommes par rapport au plan initial
+✅ Phases accomplies (partiellement ou totalement)
+Phase	État	Commentaire
+Phase 1 — Audit & Gates	✅ Terminé	Audit réalisé via session de debug, fichiers identifiés, risques documentés. Rapport d’audit validé.
+Phase 2 — Hardening non-invasif	⚠️ Partiel	Auth middleware ajouté, sanitize partiellement implémenté, mais pas encore de route /orchestrate-v2 ni tests de non-régression.
+Phase 3 — Infra parallèle & V2	❌ Non démarré	Pas de Postgres/Redis, pas de myteamStore, pas de shadow mode.
+Phase 4 — Migration contrôlée	❌ Non démarré	Pas de migration, toujours en filesystem (data/projects/).
+Phase 5 — Workers & Queue	❌ Non démarré	Pas de queue, pas de workers.
+🎯 Ce qu’on a fait en plus (non prévu dans le plan initial)
+
+    Proxy WebSocket OpenClaw : implémentation complète du handshake challenge/response
+
+    Device identity & TLS terminator : pour contourner l’exigence HTTPS du gateway
+
+    Routage UI → Minimax : contournement d’OpenClaw pour les prompts UI
+
+    Debug approfondi : signature Ed25519, logs RAW, scripts de test isolés
+
+🔴 Ce qui bloque pour passer à la suite du plan
+Blocage	Statut
+Auth middleware sécurisée	⚠️ Actuellement ouverte en dev, à durcir
+Sanitize projectId généralisée	⚠️ Partielle, à étendre
+Tests de non-régression	❌ Manquants
+Postgres + Redis	❌ Non provisionnés
+Migration script	❌ Non écrit
+Token JWT + two-step validation	❌ Non implémenté
+📌 Recommandation
+
+On termine la Phase 2 proprement avant d’attaquer la Phase 3.
+
+Prochaines actions concrètes :
+
+    Créer la route /api/chat/orchestrate-v2 qui utilise l’orchestrateur existant (non-régressive)
+
+    Ajouter des tests de non-régression avec fixtures dans data/test-projects/
+
+    Généraliser sanitizeProjectId() dans toutes les routes concernées
+
+    Durcir l’auth : désactiver les ouvertures en dev et passer en mode token requis (sauf health)

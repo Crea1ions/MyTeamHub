@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
-const path = require('path');
+const nodePath = require('path');
 const { callModel } = require('./callModel');
 
-const BASE = '/root/myteam/data/projects';
+const { PROJECTS_BASE: BASE } = require('../config/paths');
 
 /**
  * Orchestre les agents MyTeamHub en séquence
@@ -13,7 +13,7 @@ async function orchestrateMyTeam({ projectId, userMessage, model = 'openclaw' })
   let currentMessage = userMessage;
 
   // Charger la session existante
-  const sessionPath = path.join(BASE, projectId, 'sessions', 'default.json');
+  const sessionPath = nodePath.join(BASE, projectId, 'sessions', 'default.json');
   let session = { messages: [] };
 
   try {
@@ -24,7 +24,7 @@ async function orchestrateMyTeam({ projectId, userMessage, model = 'openclaw' })
   }
 
   // Charger le contexte du projet
-  const contextPath = path.join(BASE, projectId, 'context.md');
+  const contextPath = nodePath.join(BASE, projectId, 'context.md');
   let context = '';
   try {
     context = await fs.readFile(contextPath, 'utf-8');
@@ -80,7 +80,7 @@ async function orchestrateMyTeam({ projectId, userMessage, model = 'openclaw' })
   });
 
   // Sauvegarder la session
-  await fs.mkdir(path.dirname(sessionPath), { recursive: true });
+  await fs.mkdir(nodePath.dirname(sessionPath), { recursive: true });
   await fs.writeFile(sessionPath, JSON.stringify(session, null, 2));
 
   console.log('[orchestrate] Final response:', finalResponse?.slice(0, 100));
