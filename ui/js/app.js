@@ -23,6 +23,53 @@ const elements = {
     agentCards: document.querySelectorAll('.agent-card')
 };
 
+// Mobile toggle elements (may be null on non-mobile layouts)
+const btnToggleProjects = document.getElementById('btn-toggle-projects');
+const btnToggleContext = document.getElementById('btn-toggle-context');
+const panelProjects = document.getElementById('panel-projects');
+
+if (btnToggleProjects) {
+    btnToggleProjects.addEventListener('click', () => {
+        // Toggle overlay on mobile
+        if (panelProjects.classList.contains('mobile-open')) {
+            panelProjects.classList.remove('mobile-open');
+            removeMobileBackdrop();
+        } else {
+            panelProjects.classList.add('mobile-open');
+            addMobileBackdrop();
+        }
+    });
+}
+
+if (btnToggleContext) {
+    // Initialize aria state
+    btnToggleContext.setAttribute('aria-expanded', 'true');
+    btnToggleContext.addEventListener('click', () => {
+        const collapsed = elements.canvasContent.classList.toggle('collapsed');
+        btnToggleContext.setAttribute('aria-expanded', String(!collapsed));
+        // Update icon: show pencil when collapsed (to open), cross when expanded (to close)
+        btnToggleContext.textContent = collapsed ? '📝' : '✖';
+        console.log('[toggleContext] collapsed=', collapsed);
+    });
+}
+
+function addMobileBackdrop() {
+    if (document.getElementById('mobile-backdrop')) return;
+    const d = document.createElement('div');
+    d.id = 'mobile-backdrop';
+    d.className = 'mobile-overlay-backdrop';
+    d.addEventListener('click', () => {
+        panelProjects.classList.remove('mobile-open');
+        removeMobileBackdrop();
+    });
+    document.body.appendChild(d);
+}
+
+function removeMobileBackdrop() {
+    const d = document.getElementById('mobile-backdrop');
+    if (d) d.remove();
+}
+
 // API Functions
 async function apiCall(endpoint, options = {}) {
     const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -89,8 +136,21 @@ function renderProjects(filter = '') {
     
     // Add click handlers
     elements.projectList.querySelectorAll('.project-item').forEach(item => {
-        item.addEventListener('click', () => selectProject(item.dataset.id));
+        item.addEventListener('click', () => {
+            console.log('[renderProjects] project clicked', item.dataset.id);
+            selectProject(item.dataset.id);
+            // Ensure mobile overlay closes immediately after selection
+            try { closeProjectsOverlay(); } catch (e) { console.warn('[renderProjects] closeProjectsOverlay failed', e); }
+        });
     });
+}
+
+function closeProjectsOverlay() {
+    if (panelProjects && panelProjects.classList.contains('mobile-open')) {
+        panelProjects.classList.remove('mobile-open');
+        removeMobileBackdrop();
+        console.log('[closeProjectsOverlay] closed');
+    }
 }
 
 // Select Project
@@ -101,6 +161,19 @@ async function selectProject(projectId) {
     // Update UI
     renderProjects(elements.searchInput.value);
     elements.projectName.textContent = state.currentProject.name;
+
+    console.log('[selectProject] selected', projectId, state.currentProject?.name);
+
+    // If projects panel is open in mobile overlay, close it to reveal canvas/chat
+    try {
+        if (panelProjects && panelProjects.classList.contains('mobile-open')) {
+            panelProjects.classList.remove('mobile-open');
+            removeMobileBackdrop();
+            console.log('[selectProject] closed mobile projects overlay');
+        }
+    } catch (e) {
+        console.warn('[selectProject] panelProjects handling failed', e);
+    }
     
     // Enable inputs
     // If there's only one agent card, auto-select it so input becomes active
@@ -128,14 +201,91 @@ function renderContext(context) {
         `;
         return;
     }
-    
+
     elements.canvasContent.innerHTML = `
         <div class="context-display">
             <h3>Contexte</h3>
-            <div class="context-content">${context}</div>
+            <div class="context-content">${escapeHtml(context)}</div>
+            <div class="context-actions">
+                <button id="btn-edit-context" class="btn-primary">Éditer</button>
+            </div>
         </div>
         <div class="session-history" id="session-history"></div>
     `;
+
+    // Attach edit handler
+    const btnEdit = document.getElementById('btn-edit-context');
+    if (btnEdit) {
+        btnEdit.addEventListener('click', () => openContextEditor(context));
+    }
+}
+
+// Escape HTML to prevent injection when rendering raw markdown/text
+function escapeHtml(unsafe) {
+    if (unsafe == null) return '';
+    return String(unsafe)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/\'/g, '&#039;');
+}
+
+// Open inline editor for the context
+function openContextEditor(context) {
+    const container = elements.canvasContent.querySelector('.context-display');
+    if (!container) return;
+
+    container.innerHTML = `
+        <h3>Contexte</h3>
+        <div class="context-editor">
+            <textarea id="context-editor">${escapeHtml(context)}</textarea>
+            <div class="context-actions">
+                <button id="btn-save-context" class="btn-primary">Sauvegarder</button>
+                <button id="btn-cancel-context" class="btn-secondary">Annuler</button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('btn-cancel-context').addEventListener('click', cancelContextEdit);
+    document.getElementById('btn-save-context').addEventListener('click', saveContext);
+}
+
+function cancelContextEdit() {
+    // Reload the current project context
+    if (state.currentProject) selectProject(state.currentProject.id);
+}
+
+// Save context to server
+async function saveContext() {
+    const ta = document.getElementById('context-editor');
+    if (!ta || !state.currentProject) return;
+
+    const content = ta.value;
+    const btn = document.getElementById('btn-save-context');
+    btn.disabled = true;
+    btn.textContent = 'Sauvegarde...';
+
+    try {
+        console.log('[saveContext] saving context for', state.currentProject.id);
+        const res = await apiCall(`/api/context/${state.currentProject.id}`, {
+            method: 'POST',
+            body: JSON.stringify({ content })
+        });
+
+        // Reload context after successful save
+        await selectProject(state.currentProject.id);
+        // Simple feedback
+        alert('Contexte sauvegardé');
+    } catch (e) {
+        console.error('[saveContext] error', e);
+        alert('Erreur lors de la sauvegarde');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Sauvegarder';
+        }
+    }
 }
 
 // Select Agent

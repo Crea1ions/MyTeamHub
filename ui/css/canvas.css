@@ -1,5 +1,10 @@
 /* Canvas - Zone centrale */
 
+/* Allow inner scrolling when parent is a flex container */
+.canvas, .panel {
+    min-height: 0;
+}
+
 /* Project Context */
 .context-display {
     background: var(--bg-secondary);
@@ -20,6 +25,66 @@
     font-size: 13px;
     color: var(--text-secondary);
     white-space: pre-wrap;
+}
+
+/* Context editor styles */
+.context-editor textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: var(--space-md);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 13px;
+    resize: vertical;
+}
+
+.context-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.context-actions .btn-primary {
+    padding: 6px 12px;
+}
+
+/* Agent messages scroll area */
+.agent-messages {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+/* Improve touch scrolling on mobile devices */
+.canvas-content,
+.agent-messages,
+.session-history,
+.context-display {
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    /* Limit heights on mobile so each pane can scroll independently */
+    .context-display {
+        max-height: 45vh;
+        overflow-y: auto;
+    }
+
+    .session-history {
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+
+    .context-editor textarea {
+        min-height: 140px;
+    }
+}
+
+/* Collapsed context (hidden) */
+.canvas-content.collapsed {
+    display: none !important;
 }
 
 /* Session History */
