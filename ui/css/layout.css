@@ -18,10 +18,44 @@
         grid-template-columns: 1fr;
     }
     
+    /* Allow the app to scroll on narrow viewports (mobile) */
+    .app-layout {
+        height: 100vh;
+        overflow-y: auto;
+    }
+
     .panel-projects,
     .panel-agents {
-        display: none;
+        display: none !important;
     }
+
+    /* Panels should allow internal scrolling when shown on mobile */
+    .panel {
+        overflow-y: auto;
+    }
+}
+
+/* Projects overlay when toggled on mobile */
+.panel-projects.mobile-open {
+    display: block !important;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    background: var(--bg-secondary);
+    z-index: 90;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    overflow-y: auto;
+}
+
+/* When projects overlay is open, dim behind if desired */
+.mobile-overlay-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 85;
 }
 
 /* Panel commun */
@@ -33,9 +67,43 @@
     overflow: hidden;
 }
 
+/* Ensure agents panel remains visible by default (override bad selectors) */
+.app-layout .panel-agents {
+    display: flex !important;
+}
+
 .panel-agents {
     border-right: none;
     border-left: 1px solid var(--border);
+}
+
+/* Landscape mobile: prefer Canvas + Agents side-by-side for better chat visibility */
+@media (max-width: 768px) and (orientation: landscape) {
+    .app-layout {
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: 1fr;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Keep Projects hidden in landscape to maximize space */
+    .panel-projects {
+        display: none !important;
+    }
+
+    /* Ensure agents panel is visible beside canvas */
+    .panel-agents {
+        display: flex !important;
+        position: relative;
+        z-index: 2;
+        height: 100vh;
+    }
+
+    /* Canvas content: constrain height so internal scroll works */
+    .canvas-content {
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+    }
 }
 
 /* Header */

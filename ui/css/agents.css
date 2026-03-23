@@ -56,6 +56,11 @@
     margin-top: auto;
 }
 
+/* Ensure flex children can shrink to allow internal scrolling on mobile */
+.agent-chat, .agent-messages {
+    min-height: 0;
+}
+
 .agent-messages {
     flex: 1;
     overflow-y: auto;
@@ -63,6 +68,45 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
+}
+
+/* Smooth/touch scrolling */
+.agent-messages {
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    /* Limit the messages area on mobile so it can scroll independently */
+    .agent-messages {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    .agent-input {
+        position: sticky;
+        bottom: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0));
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    /* In landscape, allow agent messages to take most vertical space */
+    .agent-messages {
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+
+    .agent-input {
+        position: sticky;
+        bottom: 0;
+        z-index: 3;
+        background: var(--bg-secondary);
+    }
+}
+
+/* Ensure touch dragging is allowed vertically */
+.agent-messages, .agent-chat {
+    touch-action: pan-y;
 }
 
 .agent-message {

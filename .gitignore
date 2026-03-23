@@ -1,7 +1,10 @@
+playwright-report/
+playwright-screenshots/
+node_modules/
+.idea/
+.vscode/
+/.playwright
 node_modules
 .env
 .DS_Store
 SUIVI_DE_SESSIONS.md
-server/.env
-server/.openclaw_device.json
-server/ssl/*.pem

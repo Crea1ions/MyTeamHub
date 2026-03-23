@@ -1,5 +1,14 @@
 {
   "dependencies": {
     "jsdom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.37.0"
+  },
+  "scripts": {
+    "pw:install": "npx playwright install --with-deps",
+    "pw:test": "npx playwright test",
+    "pw:test:headed": "npx playwright test --headed",
+    "pw:test:mobile": "TEST_BASE_URL=http://localhost:3001 npx playwright test --project=mobile-portrait"
   }
 }

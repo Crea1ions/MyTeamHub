@@ -24,9 +24,14 @@ app.use('/api/chat', require('./routes/chat'));
 app.use('/api/proxy', require('./routes/proxy'));
 
 const PORT = process.env.PORT || 3001;
+// Allow overriding the bind host for CI or non-wireguard environments
+const HOST = process.env.HOST || '10.0.0.1';
 
-// Bind only to the WireGuard IP (wg0) for internal-only access
-app.listen(PORT, '10.0.0.1', () => {
-  console.log(`MyTeam Hub running on ${PORT}`);
-  console.log(`UI available on WireGuard at: http://10.0.0.1:${PORT}/`);
+app.listen(PORT, HOST, () => {
+  console.log(`MyTeam Hub running on ${HOST}:${PORT}`);
+  if (HOST === '10.0.0.1') {
+    console.log(`UI available on WireGuard at: http://${HOST}:${PORT}/`);
+  } else {
+    console.log(`UI available at: http://${HOST}:${PORT}/`);
+  }
 });
