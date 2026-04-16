@@ -1,10 +1,59 @@
-playwright-report/
+# ============================================================================
+# Runtime Data — Never committed (local execution only)
+# ============================================================================
+
+# Runtime directory structure (but preserve with .gitkeep)
+runtime/*
+!runtime/.gitkeep
+!runtime/**/
+
+# Legacy standalone runtime files (if not migrated yet)
+logs/
 playwright-screenshots/
+test-results/
+.cache/
+.playwright/
+
+# Data runtime — moved to runtime/
+data/sessions-index.json
+data/agents/
+data/projects/*/sessions/
+data/projects/*/execution.log
+
+# Audit reports (horodatés)
+AUDIT_*.md
+FIX_*.md
+UI_UX_AUDIT_*.md
+
+# ============================================================================
+# Dependencies & Build Outputs
+# ============================================================================
+
 node_modules/
+dist/
+build/
+npm-audit-server.json
+
+# ============================================================================
+# Configuration (Sensitive)
+# ============================================================================
+
+.env
+.env.local
+server/.env
+server/.openclaw_device.json
+
+# ============================================================================
+# IDE & OS
+# ============================================================================
+
 .idea/
 .vscode/
-/.playwright
-node_modules
-.env
 .DS_Store
+/.playwright
+
+# ============================================================================
+# Documentation Exclusions (if needed)
+# ============================================================================
+
 SUIVI_DE_SESSIONS.md
