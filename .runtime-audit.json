@@ -1,0 +1,993 @@
+{
+  "timestamp": "2026-04-16T12:22:55.545Z",
+  "repository": "/root/myteam",
+  "summary": {
+    "CODE": [
+      {
+        "path": ".cache/openclaw_ui.js",
+        "size": 597077,
+        "reason": "matches code pattern: /\\.js$/"
+      },
+      {
+        "path": ".eslintrc.json",
+        "size": 264,
+        "reason": "matches code pattern: /\\.json$/"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "size": 933,
+        "reason": "default classification"
+      },
+      {
+        "path": ".github/workflows/integration.yml",
+        "size": 732,
+        "reason": "default classification"
+      },
+      {
+        "path": ".github/workflows/playwright.yml",
+        "size": 1431,
+        "reason": "default classification"
+      },
+      {
+        "path": ".gitignore",
+        "size": 135,
+        "reason": "default classification"
+      },
+      {
+        "path": ".prettierrc",
+        "size": 63,
+        "reason": "default classification"
+      },
+      {
+        "path": ".runtime-audit.json",
+        "size": 29296,
+        "reason": "matches code pattern: /\\.json$/"
+      },
+      {
+        "path": "data/projects/VPS/VPS-Contexte",
+        "size": 4683,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/VPS/contexte-rêveur",
+        "size": 1391,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/VPS/extension VSCode",
+        "size": 17358,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/VPS/openclaw-v3",
+        "size": 22494,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/codesnippets/APP-RUST",
+        "size": 16314,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/codesnippets/pc-project",
+        "size": 13809,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/test/Réduire-charge-contextuelle-OpenClaw",
+        "size": 1209,
+        "reason": "default classification"
+      },
+      {
+        "path": "data/projects/test/vaultkeeper",
+        "size": 2790,
+        "reason": "default classification"
+      },
+      {
+        "path": "package-lock.json",
+        "size": 31419,
+        "reason": "matches code pattern: /\\.json$/"
+      },
+      {
+        "path": "package.json",
+        "size": 604,
+        "reason": "matches code pattern: /\\.json$/"
+      },
+      {
+        "path": "playwright-tests/basic-responsive.spec.js",
+        "size": 843,
+        "reason": "matches code pattern: /^playwright-tests\\//"
+      },
+      {
+        "path": "playwright-tests/splitter.spec.js",
+        "size": 1481,
+        "reason": "matches code pattern: /^playwright-tests\\//"
+      },
+      {
+        "path": "playwright.config.js",
+        "size": 540,
+        "reason": "matches code pattern: /\\.js$/"
+      },
+      {
+        "path": "scripts/audit-runtime.js",
+        "size": 5383,
+        "reason": "matches code pattern: /^scripts\\//"
+      },
+      {
+        "path": "scripts/check-pre-deployment.sh",
+        "size": 7214,
+        "reason": "matches code pattern: /^scripts\\//"
+      },
+      {
+        "path": "scripts/deploy-phase1.sh",
+        "size": 11361,
+        "reason": "matches code pattern: /^scripts\\//"
+      },
+      {
+        "path": "scripts/monitor-phase1.sh",
+        "size": 7212,
+        "reason": "matches code pattern: /^scripts\\//"
+      },
+      {
+        "path": "scripts/ui_headless_test.js",
+        "size": 3455,
+        "reason": "matches code pattern: /^scripts\\//"
+      },
+      {
+        "path": "server/.env",
+        "size": 1222,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/.env.example",
+        "size": 4378,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/.gitignore",
+        "size": 29,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/callModel.test.js",
+        "size": 363,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/chat.myteam.test.js",
+        "size": 1883,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/integration.proxy.test.js",
+        "size": 3585,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/middleware.apiKey.test.js",
+        "size": 3634,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/middleware.rateLimit.test.js",
+        "size": 3955,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/orchestrator.test.js",
+        "size": 403,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/promptLoader.test.js",
+        "size": 250,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/services/callModel.content-normalization.test.js",
+        "size": 4726,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/__tests__/services/callModel.fallback.test.js",
+        "size": 9833,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/config/analyzerWhitelist.json",
+        "size": 1794,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/config/endpoints.js",
+        "size": 276,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/config/paths.js",
+        "size": 250,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/index.js",
+        "size": 2960,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/middleware/auth.js",
+        "size": 3276,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/middleware/rateLimit.js",
+        "size": 8339,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/middleware/validateMyTeamHubApiKey.js",
+        "size": 4050,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/middleware/validateProjectId.js",
+        "size": 1871,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/package-lock.json",
+        "size": 222893,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/package.json",
+        "size": 1152,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/agents.js",
+        "size": 8211,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/analyser.js",
+        "size": 1865,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/chat.js",
+        "size": 12865,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/context.js",
+        "size": 935,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/files.js",
+        "size": 4962,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/health.js",
+        "size": 2476,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/projects.js",
+        "size": 2353,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/proxy.js",
+        "size": 6642,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/sessions.js",
+        "size": 4817,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/routes/studio.js",
+        "size": 10217,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/generate_device_identity.js",
+        "size": 1175,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/proxy_ws_test.js",
+        "size": 8094,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/test-api-chat-e2e.js",
+        "size": 4558,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/test-circuit-breaker.js",
+        "size": 3091,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/test-mistral-direct-http.js",
+        "size": 3511,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/scripts/tls_proxy.js",
+        "size": 2964,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/server/ssl/cert.pem",
+        "size": 1115,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/server/ssl/key.pem",
+        "size": 1704,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/server.log",
+        "size": 395,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/agentFileParser.js",
+        "size": 4052,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/agentOrchestrator.js",
+        "size": 8742,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/agentValidator.js",
+        "size": 2501,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/analyzerService.js",
+        "size": 5539,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/callModel.js",
+        "size": 8561,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/chatBuilder.js",
+        "size": 618,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/conceptValidator.js",
+        "size": 2890,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/orchestrator.js",
+        "size": 2523,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/planValidator.js",
+        "size": 4622,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/projectFileManager.js",
+        "size": 9413,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/promptLoader.js",
+        "size": 518,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/sessionManager.js",
+        "size": 5583,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/services/telegramService.js",
+        "size": 3214,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/ssl/cert.pem",
+        "size": 1115,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/ssl/key.pem",
+        "size": 1704,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/test-mistral-direct.js",
+        "size": 1188,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "server/utils/sanitize.js",
+        "size": 284,
+        "reason": "matches code pattern: /^server\\//"
+      },
+      {
+        "path": "test-env.js",
+        "size": 806,
+        "reason": "matches code pattern: /\\.js$/"
+      },
+      {
+        "path": "tests/test-rateLimit.js",
+        "size": 5228,
+        "reason": "matches code pattern: /^tests\\//"
+      },
+      {
+        "path": "ui/css/agents.css",
+        "size": 2945,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/canvas.css",
+        "size": 3000,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/chat.css",
+        "size": 7772,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/components.css",
+        "size": 6091,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/editor.css",
+        "size": 7009,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/layout.css",
+        "size": 8258,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/main.css",
+        "size": 1483,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/sidebar.css",
+        "size": 1687,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/statusbar.css",
+        "size": 6694,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/css/tree.css",
+        "size": 3981,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/index.html",
+        "size": 5077,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/agentManager.js",
+        "size": 8205,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/app.js",
+        "size": 12814,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/chat.js",
+        "size": 13672,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/editor.js",
+        "size": 16647,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/mobile-nav.js",
+        "size": 3616,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/splitters.js",
+        "size": 9747,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/state.js",
+        "size": 8106,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/studio-app.js",
+        "size": 11091,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/js/tree.js",
+        "size": 11552,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/studio.html",
+        "size": 10256,
+        "reason": "matches code pattern: /^ui\\//"
+      },
+      {
+        "path": "ui/tests/playwright/smoke/splitter.spec.js",
+        "size": 1561,
+        "reason": "matches code pattern: /^ui\\//"
+      }
+    ],
+    "RUNTIME": [
+      {
+        "path": ".env",
+        "size": 1170,
+        "reason": "matches runtime pattern: /^\\.env/"
+      },
+      {
+        "path": "AUDIT_MISTRAL_API_2026-03-24.md",
+        "size": 6388,
+        "reason": "matches runtime pattern: /^AUDIT_.*\\.md$/"
+      },
+      {
+        "path": "FIX_TELEGRAM_422_2026-03-24.md",
+        "size": 5566,
+        "reason": "matches runtime pattern: /^FIX_.*\\.md$/"
+      },
+      {
+        "path": "UI_UX_AUDIT_REPORT_2026-03-25.md",
+        "size": 38270,
+        "reason": "matches runtime pattern: /^UI_UX_AUDIT_.*\\.md$/"
+      },
+      {
+        "path": "data/agents/agent-1776083224127.agent.md",
+        "size": 1837,
+        "reason": "matches runtime pattern: /^data\\/agents\\/.*\\.agent\\.md$/"
+      },
+      {
+        "path": "data/projects/VPS/execution.log",
+        "size": 4684,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-25.json",
+        "size": 7480,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-27.json",
+        "size": 8772,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-28.json",
+        "size": 53688,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-29.json",
+        "size": 81601,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-30.json",
+        "size": 35126,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-03-31.json",
+        "size": 4469,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-01.json",
+        "size": 6974,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-02.json",
+        "size": 4974,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-06.json",
+        "size": 7253,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-11.json",
+        "size": 864,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-12.json",
+        "size": 1137,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/2026-04-13.json",
+        "size": 62648,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/VPS/sessions/default.json",
+        "size": 101924,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/codesnippets/execution.log",
+        "size": 1687,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/codesnippets/sessions/2026-04-16.json",
+        "size": 103802,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/codesnippets/sessions/default.json",
+        "size": 2452,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/demo/execution.log",
+        "size": 404,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/demo/sessions/2026-03-25.json",
+        "size": 11258,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/demo/sessions/default.json",
+        "size": 60015,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/plan-ui/execution.log",
+        "size": 285,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/plan-ui/sessions/default.json",
+        "size": 32363,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/telegram-test/execution.log",
+        "size": 92,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/telegram-test/sessions/2026-03-25.json",
+        "size": 513,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/telegram-test/sessions/default.json",
+        "size": 29000,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test/execution.log",
+        "size": 1228,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/test/sessions/2026-03-25.json",
+        "size": 122413,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test/sessions/2026-03-26.json",
+        "size": 186299,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test/sessions/2026-03-27.json",
+        "size": 9328,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test/sessions/2026-03-28.json",
+        "size": 610,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test/sessions/default.json",
+        "size": 88145,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test-project/execution.log",
+        "size": 93,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/execution\\.log$/"
+      },
+      {
+        "path": "data/projects/test-project/sessions/2026-03-25.json",
+        "size": 2277,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test-project/sessions/2026-03-28.json",
+        "size": 1273,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/test-project/sessions/default.json",
+        "size": 51841,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/projects/ui/sessions/default.json",
+        "size": 38048,
+        "reason": "matches runtime pattern: /^data\\/projects\\/[^/]+\\/sessions\\//"
+      },
+      {
+        "path": "data/sessions-index.json",
+        "size": 7845,
+        "reason": "matches runtime pattern: /^data\\/sessions-index\\.json$/"
+      },
+      {
+        "path": "logs/deployment-20260329-135614.log",
+        "size": 5887,
+        "reason": "matches runtime pattern: /^logs\\//"
+      },
+      {
+        "path": "logs/pm2-error-1.log",
+        "size": 0,
+        "reason": "matches runtime pattern: /^logs\\//"
+      },
+      {
+        "path": "logs/pm2-out-1.log",
+        "size": 1484,
+        "reason": "matches runtime pattern: /^logs\\//"
+      },
+      {
+        "path": "npm-audit-server.json",
+        "size": 363,
+        "reason": "matches runtime pattern: /^npm-audit-server\\.json$/"
+      },
+      {
+        "path": "playwright-screenshots/desktop.png",
+        "size": 43439,
+        "reason": "matches runtime pattern: /^playwright-screenshots\\//"
+      },
+      {
+        "path": "playwright-screenshots/mobile-landscape.png",
+        "size": 36596,
+        "reason": "matches runtime pattern: /^playwright-screenshots\\//"
+      },
+      {
+        "path": "playwright-screenshots/mobile-portrait.png",
+        "size": 30320,
+        "reason": "matches runtime pattern: /^playwright-screenshots\\//"
+      },
+      {
+        "path": "server/.openclaw_device.json",
+        "size": 300,
+        "reason": "matches runtime pattern: /^server\\/\\.openclaw_device\\.json$/"
+      },
+      {
+        "path": "test-results/.last-run.json",
+        "size": 45,
+        "reason": "matches runtime pattern: /^test-results\\//"
+      }
+    ],
+    "DOCUMENTATION": [
+      {
+        "path": "LICENSE",
+        "size": 1060,
+        "reason": "matches doc pattern: /^LICENSE$/"
+      },
+      {
+        "path": "PLAN.md",
+        "size": 40457,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "PLAN_ORCHESTRATOR_OPENCLAW.md",
+        "size": 3964,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "README.md",
+        "size": 9992,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "SUIVI_DE_SESSIONS.md",
+        "size": 27530,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/VPS/context.md",
+        "size": 29934,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/codesnippets/context.md",
+        "size": 309,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/demo/concept.md",
+        "size": 80,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/plan-ui/context.md",
+        "size": 8765,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/telegram-test/concept.md",
+        "size": 4,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/test/concept.md",
+        "size": 2520,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/test/context.md",
+        "size": 0,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/test-project/mynotes.md",
+        "size": 12,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/projects/ui/context.md",
+        "size": 332,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/prompts/analyste.md",
+        "size": 3915,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/prompts/artisan.md",
+        "size": 668,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/prompts/diablotin.md",
+        "size": 2905,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/prompts/ingenieur.md",
+        "size": 606,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "data/prompts/reveur.md",
+        "size": 2076,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/ANALYZER_RUNBOOK.md",
+        "size": 7920,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/AUDIT_TRAIL_EXAMPLES.md",
+        "size": 7352,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/DEPLOYMENT_PHASE1.md",
+        "size": 8040,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/DEPLOYMENT_TRACKING.csv",
+        "size": 788,
+        "reason": "matches doc pattern: /^docs\\//"
+      },
+      {
+        "path": "docs/DUAL_TRACK_EXECUTION.md",
+        "size": 10405,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/PHASE1_DEPLOYMENT_REPORT.md",
+        "size": 6829,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/PHASE2_PREPARATION.md",
+        "size": 15720,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/PLAN_13_04_2026.md",
+        "size": 0,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/README_DEPLOYMENT.md",
+        "size": 7858,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/TIMEOUT_CRITERIA.md",
+        "size": 4128,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "docs/monitoring/daily-report-2026-03-29.md",
+        "size": 197,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "documentations/SETUP_WIREGUARD_UI.md",
+        "size": 4209,
+        "reason": "matches doc pattern: /\\.md$/"
+      },
+      {
+        "path": "ui/TEST_PLAN_SPLITTERS.md",
+        "size": 2888,
+        "reason": "matches doc pattern: /\\.md$/"
+      }
+    ],
+    "SKIP": []
+  },
+  "statistics": {
+    "CODE": 108,
+    "RUNTIME": 51,
+    "DOCUMENTATION": 32,
+    "SKIP": 0,
+    "total": 191
+  },
+  "issues": [
+    {
+      "severity": "INFO",
+      "message": "Found 51 runtime files in repo (expected to be in .gitignore)",
+      "files": [
+        ".env",
+        "AUDIT_MISTRAL_API_2026-03-24.md",
+        "FIX_TELEGRAM_422_2026-03-24.md",
+        "UI_UX_AUDIT_REPORT_2026-03-25.md",
+        "data/agents/agent-1776083224127.agent.md",
+        "data/projects/VPS/execution.log",
+        "data/projects/VPS/sessions/2026-03-25.json",
+        "data/projects/VPS/sessions/2026-03-27.json",
+        "data/projects/VPS/sessions/2026-03-28.json",
+        "data/projects/VPS/sessions/2026-03-29.json"
+      ]
+    }
+  ]
+}
