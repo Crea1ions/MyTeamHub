@@ -133,6 +133,29 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
       .append('title')
       .text((d) => `${d.type}: ${d.source instanceof Object ? (d.source as D3Node).label : d.source} → ${d.target instanceof Object ? (d.target as D3Node).label : d.target}`);
 
+    // Create edge labels (only for larger screens)
+    const edgeLabels = g
+      .selectAll('text.edgeLabel')
+      .data(d3Edges)
+      .enter()
+      .append('text')
+      .attr('class', styles.edgeLabel)
+      .attr('text-anchor', 'middle')
+      .attr('pointer-events', 'none')
+      .attr('font-size', '10px')
+      .attr('fill', '#666')
+      .attr('opacity', 0.7)
+      .text((d) => {
+        // Abbreviate link type for display
+        const typeAbbr: Record<string, string> = {
+          references: 'ref',
+          referenced_by: 'by',
+          tags: 'tag',
+          related: 'rel',
+        };
+        return typeAbbr[d.type] || d.type;
+      });
+
     // Create node elements
     const nodeGroups = g
       .selectAll('g.node')
@@ -200,6 +223,19 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
 
       // Update edge positions (only visible edges)
       links.attr('x1', (d) => (d.source as D3Node).x || 0).attr('y1', (d) => (d.source as D3Node).y || 0).attr('x2', (d) => (d.target as D3Node).x || 0).attr('y2', (d) => (d.target as D3Node).y || 0);
+
+      // Update edge label positions (centered on edge midpoint)
+      edgeLabels
+        .attr('x', (d) => {
+          const source = d.source as D3Node;
+          const target = d.target as D3Node;
+          return ((source.x || 0) + (target.x || 0)) / 2;
+        })
+        .attr('y', (d) => {
+          const source = d.source as D3Node;
+          const target = d.target as D3Node;
+          return ((source.y || 0) + (target.y || 0)) / 2;
+        });
 
       // Update node positions with culling for performance
       nodeGroups.attr('transform', (d) => `translate(${d.x || 0},${d.y || 0})`);
