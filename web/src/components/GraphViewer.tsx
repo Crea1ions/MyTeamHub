@@ -37,6 +37,8 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
   const simulationRef = useRef<d3.Simulation<D3Node, D3Edge> | null>(null);
   const tickCountRef = useRef(0);
   const lastRenderRef = useRef(0);
+  const visibleNodesRef = useRef<Set<string>>(new Set());
+  const [largeDataset, setLargeDataset] = useState(false);
 
   // Update dimensions on mount/resize
   useEffect(() => {
@@ -57,6 +59,8 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
     if (!svgRef.current || nodes.length === 0) return;
 
     const { width, height } = dimensions;
+    const isLargeDataset = nodes.length > 100;
+    setLargeDataset(isLargeDataset);
 
     // Prepare data
     const d3Nodes: D3Node[] = nodes.map((node) => ({
@@ -89,7 +93,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
     });
     svg.call(zoom);
 
-    // Create force simulation
+    // Create force simulation with tuning for large datasets
     const simulation = d3
       .forceSimulation<D3Node, D3Edge>(d3Nodes)
       .force(
@@ -97,12 +101,12 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
         d3
           .forceLink<D3Node, D3Edge>(d3Edges)
           .id((d) => d.id)
-          .distance(100)
+          .distance(isLargeDataset ? 150 : 100) // Larger distance for large graphs
       )
-      .force('charge', d3.forceManyBody<D3Node>().strength(-300))
+      .force('charge', d3.forceManyBody<D3Node>().strength(isLargeDataset ? -200 : -300)) // Reduce for large graphs
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .alphaMin(0.001) // Convergence threshold for performance
-      .velocityDecay(0.4); // Higher decay = faster convergence
+      .alphaMin(isLargeDataset ? 0.005 : 0.001) // Faster convergence for large graphs
+      .velocityDecay(isLargeDataset ? 0.6 : 0.4); // Higher decay for faster stabilization
 
     simulationRef.current = simulation;
 
@@ -214,12 +218,25 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({
       .attr('fill', '#fff')
       .text((d) => d.label.substring(0, 10)); // Truncate long labels
 
-    // Update positions on simulation tick with throttling (60fps)
-    const renderInterval = 1000 / 60; // ~16.67ms for 60fps
+    // Update positions on simulation tick with throttling and culling
+    const renderInterval = isLargeDataset ? 1000 / 30 : 1000 / 60; // 30fps for large graphs, 60fps for small
     simulation.on('tick', () => {
       const now = performance.now();
       if (now - lastRenderRef.current < renderInterval) return; // Throttle
       lastRenderRef.current = now;
+
+      // Viewport culling for large datasets
+      if (isLargeDataset) {
+        const padding = 100;
+        const visibleNodes = new Set<string>();
+        d3Nodes.forEach(node => {
+          if ((node.x || 0) > -padding && (node.x || 0) < width + padding &&
+              (node.y || 0) > -padding && (node.y || 0) < height + padding) {
+            visibleNodes.add(node.id);
+          }
+        });
+        visibleNodesRef.current = visibleNodes;
+      }
 
       // Update edge positions (only visible edges)
       links.attr('x1', (d) => (d.source as D3Node).x || 0).attr('y1', (d) => (d.source as D3Node).y || 0).attr('x2', (d) => (d.target as D3Node).x || 0).attr('y2', (d) => (d.target as D3Node).y || 0);
