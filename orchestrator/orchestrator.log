@@ -1,0 +1,3 @@
+[2m2026-04-18T02:01:29.035496Z[0m [32m INFO[0m [2morchestrator[0m[2m:[0m Vault initialized at "./vault"
+[2m2026-04-18T02:01:29.035631Z[0m [32m INFO[0m [2morchestrator[0m[2m:[0m OrchestratorEngine initialized
+[2m2026-04-18T02:01:29.035896Z[0m [32m INFO[0m [2morchestrator[0m[2m:[0m Server listening on http://127.0.0.1:8001

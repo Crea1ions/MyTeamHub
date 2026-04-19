@@ -1,0 +1,121 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #111826;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-bottom: 1px solid #243244;
+  background-color: #162033;
+  justify-content: space-between;
+}
+
+.fileName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e6edf3;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.unsaved {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffcc66;
+  animation: pulse 1s infinite;
+  flex-shrink: 0;
+}
+
+.saveToVaultButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #0066cc;
+  color: #e6edf3;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.saveToVaultButton:hover:not(:disabled) {
+  background-color: #0080ff;
+}
+
+.saveToVaultButton:active:not(:disabled) {
+  opacity: 0.8;
+}
+
+.saveToVaultButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.saveToVaultButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.editor {
+  flex: 1;
+  padding: 1rem;
+  background-color: #0b0f14;
+  color: #e6edf3;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+.editor::placeholder {
+  color: #8b98a5;
+}
+
+.editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editor::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor::-webkit-scrollbar-thumb {
+  background-color: #243244;
+  border-radius: 4px;
+}
+
+.editor::-webkit-scrollbar-thumb:hover {
+  background-color: #4c8dff;
+}
+
+.footer {
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #243244;
+  background-color: #162033;
+  font-size: 0.75rem;
+  color: #8b98a5;
+}
+
+.hint {
+  opacity: 0.7;
+}

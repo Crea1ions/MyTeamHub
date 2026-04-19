@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #111826;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #243244;
+  background-color: #162033;
+
+&   h2 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #e6edf3;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+
+&   button {
+    background: none;
+    border: 1px solid #243244;
+    color: #8b98a5;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #243244;
+      color: #4c8dff;
+      border-color: #4c8dff;
+    }
+  }
+}
+
+.canvas {
+  flex: 1;
+  overflow: auto;
+  background-color: #0b0f14;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #243244;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #4c8dff;
+    }
+  }
+}
+
+.graph {
+  display: block;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #243244;
+  background-color: #162033;
+  font-size: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #8b98a5;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
