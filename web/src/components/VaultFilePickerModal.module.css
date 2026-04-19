@@ -1,0 +1,272 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #30363d;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #c9d1d9;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #8b949e;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover:not(:disabled) {
+  background-color: #30363d;
+  color: #c9d1d9;
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.description {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #8b949e;
+  line-height: 1.5;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c9d1d9;
+  margin-bottom: 8px;
+}
+
+.fileInput,
+.pathInput {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #c9d1d9;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.fileInput:focus,
+.pathInput:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+.fileInput:disabled,
+.pathInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 6px 0 0 0;
+  font-size: 12px;
+  color: #6e7681;
+  line-height: 1.4;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #6e7681;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background-color: #30363d;
+}
+
+.divider::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background-color: #30363d;
+}
+
+.error {
+  background-color: #3d1f1a;
+  border: 1px solid #da3633;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.error p {
+  margin: 0;
+  font-size: 13px;
+  color: #f85149;
+  line-height: 1.4;
+}
+
+.preview {
+  background-color: #0f1419;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.previewLabel {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #6e7681;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.previewPath {
+  margin: 0;
+  font-size: 13px;
+  color: #58a6ff;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #30363d;
+  background-color: #010409;
+}
+
+.buttonSecondary,
+.buttonPrimary {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.buttonSecondary {
+  background-color: transparent;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  background-color: #161b22;
+  border-color: #58a6ff;
+  color: #58a6ff;
+}
+
+.buttonPrimary {
+  background-color: #238636;
+  color: #ffffff;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+  background-color: #2ea043;
+}
+
+.buttonPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .header {
+    padding: 16px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .footer {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .buttonSecondary,
+  .buttonPrimary {
+    flex: 1;
+    min-width: 0;
+  }
+}

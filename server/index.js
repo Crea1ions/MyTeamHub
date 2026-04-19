@@ -22,6 +22,7 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/context', require('./routes/context'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/proxy', require('./routes/proxy'));
+app.use('/api/orchestrator', require('./routes/orchestrator'));
 
 const PORT = process.env.PORT || 3001;
 // Allow overriding the bind host for CI or non-wireguard environments
