@@ -37,7 +37,7 @@
   padding: 0;
   border: 1px solid #30363d;
   background: none;
-  color: #8b949e;
+  color: var(--text-secondary);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -120,7 +120,7 @@
   background-color: #161b22;
   border: 1px solid #30363d;
   border-radius: 4px;
-  color: #8b949e;
+  color: var(--text-secondary);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -140,7 +140,7 @@
 .statsDetail {
   padding: var(--spacing-sm) 0;
   font-size: 11px;
-  color: #8b949e;
+  color: var(--text-secondary);
   background-color: #161b22;
   border-radius: 4px;
   margin-top: var(--spacing-xs);
@@ -200,7 +200,7 @@
 
 .loadingText {
   font-size: 13px;
-  color: #8b949e;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -230,7 +230,7 @@
   background-color: #238636;
   border: 1px solid #238636;
   border-radius: 6px;
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;

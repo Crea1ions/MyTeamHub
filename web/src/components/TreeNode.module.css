@@ -31,7 +31,7 @@
 }
 
 .nodeRow.file {
-  color: #8b949e;
+  color: var(--text-secondary);
 }
 
 /* Main content container */
@@ -107,7 +107,7 @@
 }
 
 .fileIcon {
-  color: #8b949e;
+  color: var(--text-secondary);
 }
 
 /* Node label container */
@@ -188,7 +188,7 @@
   }
 
   .nodeRow.file {
-    color: #8b949e;
+    color: var(--text-secondary);
   }
 
   .folderIcon,

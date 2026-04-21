@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #111826;
+  background-color: var(--bg-secondary);
   overflow-y: auto;
 }
 
@@ -15,11 +15,11 @@
 }
 
 .container::-webkit-scrollbar-thumb {
-  background-color: #243244;
+  background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 
   &:hover {
-    background-color: #4c8dff;
+    background-color: var(--accent-primary);
   }
 }
 
@@ -35,7 +35,7 @@
     margin: 0;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #e6edf3;
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -77,7 +77,7 @@
 .agentCount {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #4c8dff;
+  color: var(--accent-primary);
   margin: 0.5rem 0;
 }
 
@@ -90,7 +90,7 @@
 
 .divider {
   height: 1px;
-  background-color: #243244;
+  background-color: var(--scrollbar-thumb);
   margin: 0;
 }
 
@@ -112,12 +112,12 @@
     width: var(--icon-size-sm, 16px);
     height: var(--icon-size-sm, 16px);
     cursor: pointer;
-    accent-color: #4c8dff;
+    accent-color: var(--accent-primary);
   }
 
 &   span {
     font-size: 0.875rem;
-    color: #e6edf3;
+    color: var(--text-primary);
   }
 
   &:hover input {
@@ -148,7 +148,7 @@
 }
 
 .value {
-  color: #e6edf3;
+  color: var(--text-primary);
   text-align: right;
 }
 

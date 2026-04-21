@@ -123,7 +123,7 @@
 .tooltipPath {
   font-family: 'Courier New', monospace;
   font-size: 11px;
-  color: #8b949e;
+  color: var(--text-secondary);
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -133,7 +133,7 @@
 .emptyList {
   padding: var(--spacing-xl, 16px);
   text-align: center;
-  color: #8b949e;
+  color: var(--text-secondary);
   font-size: 13px;
   background-color: #010409;
   border: 1px solid #30363d;
@@ -229,7 +229,7 @@
   gap: var(--spacing-sm, 4px);
   padding: var(--spacing-xs, 2px) var(--spacing-md, 8px);
   background-color: #f85149;
-  color: white;
+  color: var(--text-on-primary);
   border-radius: 12px;
   font-size: 11px;
   font-weight: 500;
@@ -247,7 +247,7 @@
 }
 
 .target {
-  color: #8b949e;
+  color: var(--text-secondary);
   font-family: 'Courier New', monospace;
   font-size: 12px;
   overflow: hidden;

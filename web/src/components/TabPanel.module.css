@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #0b0f14;
+  background-color: var(--input-bg);
 }
 
 .tabBar {
@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #1e2632;
-  background-color: #111826;
+  background-color: var(--bg-secondary);
   padding: 0 var(--spacing-md, 8px);
   min-height: 36px;
   flex-shrink: 0;
@@ -29,7 +29,7 @@
   padding: var(--spacing-6, 6px) var(--spacing-lg, 12px);
   border: none;
   background: none;
-  color: #8b949e;
+  color: var(--text-secondary);
   cursor: pointer;
   font-size: 12px;
   font-weight: 500;
@@ -41,7 +41,7 @@
 
 .tab:hover {
   color: #c9d1d9;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(230, 237, 243, 0.05);
 }
 
 .tab.active {
@@ -78,7 +78,7 @@
   height: var(--icon-size-lg, 24px);
   border: none;
   background: none;
-  color: #8b949e;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.2s ease;
   flex-shrink: 0;

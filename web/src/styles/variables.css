@@ -49,6 +49,52 @@
   /* Borders & dividers */
   --border-color: #1e2632;              /* Consistent border color */
   --border-thickness: 1px;              /* Standard border thickness */
+
+  /* ===== COLOR THEME (DARK MODE) ===== */
+  /* Backgrounds */
+  --bg-primary: #0b0f14;                /* Main background (Studio, Vault) */
+  --bg-secondary: #111826;              /* Secondary backgrounds (inputs, panels) */
+  --bg-tertiary: #161b22;               /* Tertiary (hover states, cards) */
+  --bg-navbar: #162033;                 /* Navigation bar background */
+  --bg-hover: #0d1117;                  /* Hover overlay */
+
+  /* Text Colors */
+  --text-primary: #e6edf3;              /* Primary text (light gray-white) */
+  --text-secondary: #8b949e;            /* Secondary text (medium gray) */
+  --text-muted: #6e7681;                /* Muted text (darker gray) */
+  --text-on-primary: #ffffff;           /* Text on primary buttons (pure white) */
+
+  /* Accent Colors */
+  --accent-primary: #4c8dff;            /* Primary accent (blue) */
+  --accent-success: #2ee59d;            /* Success/active (green) */
+  --accent-warning: #fb923c;            /* Warning (orange) */
+  --accent-danger: #f85149;             /* Danger/error (red) */
+  --accent-purple: #a78bfa;             /* Secondary accent (purple) */
+
+  /* Component Colors */
+  --scrollbar-track: transparent;       /* Scrollbar track (see-through) */
+  --scrollbar-thumb: #243244;           /* Scrollbar thumb (light gray) */
+  --scrollbar-thumb-hover: #4c8dff;     /* Scrollbar thumb on hover (blue) */
+  
+  /* Input/Form Elements */
+  --input-bg: #0b0f14;                  /* Input background */
+  --input-border: #30363d;              /* Input border */
+  --input-text: #e6edf3;                /* Input text */
+  --input-placeholder: #6e7681;         /* Input placeholder */
+  
+  /* Buttons */
+  --button-primary-bg: #4c8dff;         /* Primary button background */
+  --button-primary-text: #ffffff;       /* Primary button text */
+  --button-secondary-bg: #0d1117;       /* Secondary button background */
+  --button-secondary-text: #8b949e;     /* Secondary button text */
+  
+  /* Chat Bubbles */
+  --chat-user-bg: rgba(76, 141, 255, 0.15);    /* User message background (blue tint) */
+  --chat-assistant-bg: rgba(46, 229, 157, 0.1); /* Assistant message background (green tint) */
+  
+  /* Status & Indicators */
+  --status-online: #2ee59d;             /* Online status (green) */
+  --status-offline: #8b949e;            /* Offline status (gray) */
 }
 
 /* ========================================

@@ -172,7 +172,7 @@
 
 .nodeSelected {
   fill: #ef4444;
-  stroke: #ffffff;
+  stroke: var(--text-primary);
   stroke-width: 2px;
   filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.6));
 }
@@ -186,7 +186,7 @@
 .nodeLabel {
   pointer-events: none;
   font-weight: 600;
-  fill: #ffffff;
+  fill: var(--text-primary);
   text-shadow: 0 0 3px rgba(11, 15, 20, 0.8);
   font-size: 11px;
   transition: opacity 0.15s ease;
@@ -213,7 +213,7 @@
 }
 
 .infoLeft {
-  color: #8b949e;
+  color: var(--text-secondary);
   font-size: 12px;
   display: flex;
   gap: var(--spacing-lg, 12px);
@@ -234,7 +234,7 @@
   align-items: center;
   gap: var(--spacing-6, 6px);
   font-size: 11px;
-  color: #8b949e;
+  color: var(--text-secondary);
 }
 
 .legendDot {

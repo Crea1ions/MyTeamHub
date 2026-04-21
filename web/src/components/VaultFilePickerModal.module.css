@@ -42,7 +42,7 @@
 .closeButton {
   background: none;
   border: none;
-  color: #8b949e;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: var(--spacing-sm, 4px);
   display: flex;
@@ -71,7 +71,7 @@
 .description {
   margin: 0 0 var(--spacing-2xl, 20px) 0;
   font-size: 14px;
-  color: #8b949e;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -227,7 +227,7 @@
 
 .buttonPrimary {
   background-color: #238636;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .buttonPrimary:hover:not(:disabled) {
