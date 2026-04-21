@@ -1,0 +1,85 @@
+/* ==========================================
+   PHASE 7 — CSS VARIABLES (GLOBAL TOKENS)
+   Source: PHASE_7_AUDIT_REPORT.md
+   Date: 2026-04-22
+   ========================================== */
+
+:root {
+  /* ===== LAYOUT CONSTANTS (CRITICAL) ===== */
+  /* 3-column split pane: left-fixed + center-flex + right-resizable */
+  --layout-left-width: 280px;           /* SplitPaneLayout.columnLeft */
+  --layout-center-min-width: 300px;     /* SplitPaneLayout.columnCenter */
+  --layout-right-width: 350px;          /* SplitPaneLayout.columnRight (default) */
+  --layout-right-min-width: 200px;      /* SplitPaneLayout.columnRight (minimum) */
+  --layout-right-max-width: 600px;      /* SplitPaneLayout.columnRight (maximum) */
+  
+  /* Navigation & headers */
+  --navbar-height: 48px;                /* Navigation.navbar */
+  
+  /* Dividers */
+  --divider-width: 4px;                 /* SplitPaneLayout.dividerRight */
+
+  /* ===== ICON & BUTTON SIZES ===== */
+  /* Small icons/indicators */
+  --icon-size-sm: 6px;                  /* Navigation.statusDot */
+  
+  /* Medium icons */
+  --icon-size-md: 12px;                 /* AgentChat.spinner */
+  
+  /* Button sizes (action icons) */
+  --icon-size-button-sm: 20px;          /* VaultExplorer.clearButton */
+  --icon-size-button-md: 28px;          /* VaultExplorer.refreshButton */
+  --icon-size-button-lg: 32px;          /* VaultExplorer.spinner */
+
+  /* ===== SPACING SYSTEM ===== */
+  /* Unified spacing scale for padding, margins, gaps */
+  --spacing-xs: 4px;                    /* Extra small (margins between text) */
+  --spacing-sm: 8px;                    /* Small (common gap, small padding) */
+  --spacing-md: 12px;                   /* Medium (standard padding) */
+  --spacing-lg: 16px;                   /* Large (header padding, container padding) */
+  --spacing-xl: 24px;                   /* Extra large (section margins) */
+
+  /* ===== UI ELEMENT DIMENSIONS ===== */
+  /* Scrollbars */
+  --scrollbar-width: 8px;               /* All components with ::-webkit-scrollbar */
+  
+  /* Modals & containers */
+  --modal-max-width: 600px;             /* VaultFilePickerModal.modal */
+  
+  /* Borders & dividers */
+  --border-color: #1e2632;              /* Consistent border color */
+  --border-thickness: 1px;              /* Standard border thickness */
+}
+
+/* ========================================
+   USAGE NOTES:
+   
+   1. All layout constants should be used in:
+      - SplitPaneLayout.module.css
+      - Navigation.module.css
+      - Any component that depends on layout dimensions
+   
+   2. Icon sizes should be used in:
+      - VaultExplorer.module.css
+      - AgentChat.module.css
+      - TreeNode.module.css
+      - Any component with buttons/icons
+   
+   3. Spacing should be used for:
+      - padding, margin, gap in all components
+      - Standardizes inconsistent spacing across UI
+   
+   4. Phase 7 Goal:
+      - Extract all hardcoded px to these variables
+      - Single source of truth for layout/spacing
+      - Ready for responsive breakpoints (Phase 8)
+   
+   5. Phase 8 Mobile Breakpoints:
+      Will add media queries using these variables:
+      @media (max-width: 1024px) {
+        :root { --layout-left-width: 200px; }
+      }
+      @media (max-width: 768px) {
+        :root { --layout-left-width: 0; display: none; }
+      }
+   ======================================== */

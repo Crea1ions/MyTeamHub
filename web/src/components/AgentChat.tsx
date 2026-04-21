@@ -30,17 +30,17 @@ export const AgentChat: React.FC<AgentChatProps> = ({
   editorContext,
 }) => {
   const [input, setInput] = useState('');
-  const [inputRows, setInputRows] = useState(1);
+  const [inputRows, setInputRows] = useState(4);  // Start with 4 rows minimum
   const selectedAgent = agents.find((a) => a.id === selectedAgentId);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
     
-    // Auto-expand textarea based on content
+    // Auto-expand textarea based on content - min 4 lines, max 8
     const lines = value.split('\n').length;
     const maxRows = 8;
-    setInputRows(Math.min(Math.max(1, lines), maxRows));
+    setInputRows(Math.min(Math.max(4, lines), maxRows));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,7 +48,7 @@ export const AgentChat: React.FC<AgentChatProps> = ({
     if (input.trim() && !isLoading) {
       onSendMessage(input);
       setInput('');
-      setInputRows(1); // Reset rows after sending
+      setInputRows(4);  // Reset to 4 rows minimum
     }
   };
 
@@ -101,18 +101,36 @@ export const AgentChat: React.FC<AgentChatProps> = ({
             <p className={styles.hint}>Send a message to begin</p>
           </div>
         ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className={`${styles.message} ${styles[msg.role]}`}>
-              <div className={styles.role}>{msg.role === 'user' ? 'You' : 'Agent'}</div>
-              <div className={styles.content}>
-                {msg.role === 'assistant' ? (
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
-                ) : (
-                  msg.content
-                )}
+          messages.map((msg) => {
+            const agentName = msg.role === 'assistant' && msg.agentId 
+              ? agents.find((a) => a.id === msg.agentId)?.name || 'Agent'
+              : null;
+            const timestamp = msg.timestamp 
+              ? new Date(msg.timestamp).toLocaleString('fr-FR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : null;
+            
+            return (
+              <div key={msg.id} className={`${styles.message} ${styles[msg.role]}`}>
+                <div className={styles.role}>
+                  {msg.role === 'user' ? 'You' : agentName || 'Agent'}
+                  {timestamp && <span className={styles.timestamp}>{timestamp}</span>}
+                </div>
+                <div className={styles.content}>
+                  {msg.role === 'assistant' ? (
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  ) : (
+                    msg.content
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         {isLoading && (
           <div className={styles.message + ' ' + styles.assistant}>

@@ -4,9 +4,14 @@
     "pm2": "^6.0.14"
   },
   "devDependencies": {
-    "@playwright/test": "^1.37.0"
+    "@playwright/test": "^1.37.0",
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/cli": "^2.10.1"
   },
   "scripts": {
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
     "pw:install": "npx playwright install --with-deps",
     "pw:test": "npx playwright test",
     "pw:test:headed": "npx playwright test --headed",

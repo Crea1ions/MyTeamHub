@@ -1,0 +1,48 @@
+
+> tauri:dev
+> tauri dev
+
+     Running BeforeDevCommand (`cd /home/devdipper/dev/APP/001-APP-MyTeamHub/web && npm run dev`)
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+        Info Watching /home/devdipper/dev/APP/001-APP-MyTeamHub/src-tauri for changes...
+[1m[92m    Updating[0m crates.io index
+[1m[96m       Fetch[0m [========>                        ] 1 complete; 5 pending        [1m[96m       Fetch[0m [========>                        ] 4 complete; 2 pending        [1m[96m       Fetch[0m [===========>                     ] 6 complete; 58 pending       [1m[96m       Fetch[0m [===========>                     ] 17 complete; 47 pending      [1m[96m       Fetch[0m [==============>                  ] 64 complete; 107 pending     [1m[96m       Fetch[0m [==============>                  ] 78 complete; 93 pending      
+> myteamhub-ui@0.1.0 dev
+> astro dev
+
+[1m[96m       Fetch[0m [=================>               ] 171 complete; 112 pending    [1m[96m       Fetch[0m [=================>               ] 205 complete; 78 pending     [1m[96m       Fetch[0m [=================>               ] 283 complete; 0 pending      [1m[96m       Fetch[0m [====================>            ] 283 complete; 55 pending     [1m[96m       Fetch[0m [====================>            ] 297 complete; 41 pending     [1m[96m       Fetch[0m [=======================>         ] 338 complete; 32 pending     [1m[96m       Fetch[0m [=======================>         ] 362 complete; 8 pending      [1m[96m       Fetch[0m [==========================>      ] 388 complete; 1 pending      [1m[96m       Fetch[0m [==========================>      ] 389 complete; 0 pending      [1m[96m       Fetch[0m [=============================>   ] 390 complete; 6 pending      [1m[96m       Fetch[0m [=============================>   ] 396 complete; 0 pending      [1m[96m       Fetch[0m [=============================>   ] 399 complete; 0 pending      [1m[96m       Fetch[0m [=============================>   ] 400 complete; 0 pending      [K[1m[92m     Locking[0m 478 packages to latest compatible versions
+[1m[92m      Adding[0m generic-array v0.14.7 [1m[33m(available: v0.14.9)[0m
+22:14:34 [vite] Port 3000 is in use, trying another one...
+22:14:34 [vite] Port 3001 is in use, trying another one...
+22:14:34 [vite] Port 3002 is in use, trying another one...
+22:14:34 [vite] Port 3003 is in use, trying another one...
+
+ astro  v4.5.18 ready in 915 ms
+
+┃ Local    http://localhost:3004/
+
+22:14:34 watching for file changes...
+[1m[92m      Adding[0m toml         Info File src-tauri/icons/icon.png changed. Rebuilding application...
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on artifact directory
+[1m[92m   Compiling[0m myteamhub v0.1.0 (/home/devdipper/dev/APP/001-APP-MyTeamHub/src-tauri)
+[1m[96m    Building[0m [=======================> ] 445/447: myteamhub(build)            [1m[96m    Building[0m [=======================> ] 446/447: myteamhub(bin)              [K[1m[92m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 26.16s
+[1m[92m     Running[0m `target/debug/myteamhub`
+[Tauri] MyTeamHub dir: "/home/devdipper/.myteamhub"
+[Tauri] Frontend served at: http://localhost:3002
+[Tauri] Orchestrator at: http://localhost:8001
+ DevCommand (`cargo  run --no-default-features --color always --`)
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m    Blocking[0m waiting for file lock on package cache
+[1m[92m   Compiling[0m myteamhub v0.1.0 (/home/devdipper/dev/APP/001-APP-MyTeamHub/src-tauri)
+[1m[96m    Building[0m [=======================> ] 445/447: myteamhub(build)            [1m[96m    Building[0m [=======================> ] 446/447: myteamhub(bin)              [K[1m[92m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 20.04s
+[1m[92m     Running[0m `target/debug/myteamhub`
+[Tauri] MyTeamHub dir: "/home/devdipper/.myteamhub"
+[Tauri] Frontend served at: http://localhost:3002
+[Tauri] Orchestrator at: http://localhost:8001

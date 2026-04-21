@@ -8,7 +8,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     // Initialize Vault
-    let vault_root = PathBuf::from("./vault");
+    // Phase 6.1: Support desktop with ~/.myteamhub/vault path
+    let vault_root = {
+        let home = std::env::var("HOME").unwrap_or_else(|_| "./".to_string());
+        PathBuf::from(home).join(".myteamhub").join("vault")
+    };
+    
+    // Ensure vault directory exists
+    std::fs::create_dir_all(&vault_root).ok();
+    
     let vault = VaultManager::new(vault_root)?;
     let vault = Arc::new(vault);
     tracing::info!("Vault initialized at {:?}", vault.root());

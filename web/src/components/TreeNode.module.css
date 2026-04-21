@@ -4,7 +4,7 @@
 .nodeRow {
   display: flex;
   align-items: center;
-  padding: 6px 8px;
+  padding: 6px var(--spacing-sm);
   margin: 2px 0;
   cursor: pointer;
   user-select: none;
@@ -48,8 +48,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
   padding: 0;
   margin: 0 2px 0 0;
   border: none;
@@ -63,15 +63,15 @@
 }
 
 .chevron {
-  width: 16px;
-  height: 16px;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
   color: #6e7681;
   transition: color 0.15s ease;
 }
 
 .chevronPlaceholder {
-  width: 16px;
-  height: 16px;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
   display: inline-block;
 }
 
@@ -80,8 +80,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
   flex-shrink: 0;
   margin: 0 4px 0 0;
 }
@@ -157,8 +157,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
   background-color: rgba(167, 113, 247, 0.15);
   color: #a371f7;
   border-radius: 50%;
@@ -220,8 +220,8 @@
   }
 
   .linkBadge {
-    width: 16px;
-    height: 16px;
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
     font-size: 9px;
   }
 }

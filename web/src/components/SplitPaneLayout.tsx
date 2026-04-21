@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './SplitPaneLayout.module.css';
 
 export interface SplitPaneLayoutProps {
@@ -7,11 +7,14 @@ export interface SplitPaneLayoutProps {
   right: React.ReactNode;
   onLeftResize?: (width: number) => void;
   onCenterResize?: (width: number) => void;
+  onRightResize?: (width: number) => void;
 }
 
 /**
- * 3-Column VSCode-like split pane layout
- * Responsive columns with minimum sizes
+ * VSCode-style IDE layout with 3 columns:
+ * - Left: FIXED 280px (navigation stable)
+ * - Center: FLEX responsive (fills available space, adapts to right column changes)
+ * - Right: RESIZABLE max 400px (user controlled, graph adapts)
  */
 export const SplitPaneLayout: React.FC<SplitPaneLayoutProps> = ({
   left,
@@ -19,103 +22,120 @@ export const SplitPaneLayout: React.FC<SplitPaneLayoutProps> = ({
   right,
   onLeftResize,
   onCenterResize,
+  onRightResize,
 }) => {
-  const [leftWidth, setLeftWidth] = useState(280);
-  const [centerWidth, setCenterWidth] = useState(500);
-  const [isDraggingLeft, setIsDraggingLeft] = useState(false);
-  const [isDraggingCenter, setIsDraggingCenter] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [rightWidth, setRightWidth] = useState(() => {
+    const saved = localStorage.getItem('split-pane-right-width');
+    return saved ? parseInt(saved, 10) : 350;
+  });
+  
   const [containerWidth, setContainerWidth] = useState(window.innerWidth);
+  const dragStartXRef = useRef(0);
+  const dragStartRightWidthRef = useRef(0);
+  const [isDraggingRight, setIsDraggingRight] = useState(false);
 
-  // Track container width for responsive behavior
-  React.useEffect(() => {
+  // Track container width for responsive
+  useEffect(() => {
     const handleResize = () => {
-      const container = document.querySelector('[class*="container"]') as HTMLElement;
-      if (container) {
-        setContainerWidth(container.clientWidth);
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
       }
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    const timer = setTimeout(handleResize, 100);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timer);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleMouseDown = (type: 'left' | 'center') => (e: React.MouseEvent) => {
+  // Handle mouse down on right divider
+  const handleRightDividerMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (type === 'left') {
-      setIsDraggingLeft(true);
-    } else {
-      setIsDraggingCenter(true);
-    }
+    e.stopPropagation();
+    
+    setIsDraggingRight(true);
+    dragStartXRef.current = e.clientX;
+    dragStartRightWidthRef.current = rightWidth;
+    
+    document.body.classList.add('dragging-split-pane');
   };
 
-  React.useEffect(() => {
+  // Handle mouse move - update right column width
+  useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingLeft && !isDraggingCenter) return;
+      if (!isDraggingRight) return;
 
-      if (isDraggingLeft) {
-        const newLeftWidth = Math.max(200, Math.min(500, e.clientX));
-        setLeftWidth(newLeftWidth);
-        onLeftResize?.(newLeftWidth);
-      }
+      const delta = dragStartXRef.current - e.clientX; // Negative = drag left (expand right), positive = drag right (shrink right)
+      const minRightWidth = 200;
+      const maxRightWidth = Math.min(400, containerWidth * 0.4); // Max 400px or 40% of container
 
-      if (isDraggingCenter) {
-        const newCenterWidth = Math.max(300, Math.min(800, e.clientX - leftWidth - 4));
-        setCenterWidth(newCenterWidth);
-        onCenterResize?.(newCenterWidth);
-      }
+      const newRightWidth = Math.max(
+        minRightWidth,
+        Math.min(maxRightWidth, dragStartRightWidthRef.current + delta)
+      );
+      
+      setRightWidth(newRightWidth);
+      localStorage.setItem('split-pane-right-width', newRightWidth.toString());
+      onRightResize?.(newRightWidth);
     };
 
     const handleMouseUp = () => {
-      setIsDraggingLeft(false);
-      setIsDraggingCenter(false);
+      setIsDraggingRight(false);
+      document.body.classList.remove('dragging-split-pane');
     };
 
-    if (isDraggingLeft || isDraggingCenter) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+    if (isDraggingRight) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
       return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDraggingLeft, isDraggingCenter, leftWidth, centerWidth, onLeftResize, onCenterResize]);
+  }, [isDraggingRight, containerWidth, onRightResize]);
 
-  // Responsive sizing: on small screens, reduce column sizes proportionally
-  const effectiveLeftWidth = Math.min(leftWidth, Math.max(150, containerWidth * 0.2));
-  const effectiveCenterWidth = Math.min(centerWidth, Math.max(200, containerWidth * 0.3));
-  const effectiveRightWidth = Math.max(200, containerWidth - effectiveLeftWidth - effectiveCenterWidth - 8);
+  const leftWidth = 280; // Fixed
+  const centerWidth = containerWidth - leftWidth - rightWidth - 8; // 8px for divider
 
   return (
-    <div className={styles.container}>
-      {/* Left Column */}
-      <div className={styles.column} style={{ width: `${effectiveLeftWidth}px`, minWidth: '150px' }}>
+    <div className={styles.container} ref={containerRef}>
+      {/* Left Column - FIXED navigation */}
+      <div 
+        className={styles.columnLeft}
+        style={{ width: `${leftWidth}px` }}
+      >
         {left}
       </div>
 
-      {/* Left Divider */}
-      <div
-        className={`${styles.divider} ${isDraggingLeft ? styles.active : ''}`}
-        onMouseDown={handleMouseDown('left')}
-      />
-
-      {/* Center Column */}
-      <div className={styles.column} style={{ width: `${effectiveCenterWidth}px`, minWidth: '200px' }}>
+      {/* Center Column - FLEX responsive graph */}
+      <div 
+        className={styles.columnCenter}
+        style={{ 
+          width: `${Math.max(300, centerWidth)}px`,
+        }}
+      >
         {center}
       </div>
 
-      {/* Center Divider */}
+      {/* Right Divider - draggable */}
       <div
-        className={`${styles.divider} ${isDraggingCenter ? styles.active : ''}`}
-        onMouseDown={handleMouseDown('center')}
+        className={`${styles.dividerRight} ${isDraggingRight ? styles.active : ''}`}
+        onMouseDown={handleRightDividerMouseDown}
+        role="separator"
+        aria-orientation="vertical"
+        title="Drag to resize content panel"
       />
 
-      {/* Right Column */}
-      <div className={styles.column} style={{ width: `${effectiveRightWidth}px`, minWidth: '200px', flex: 1 }}>
+      {/* Right Column - RESIZABLE content */}
+      <div 
+        className={styles.columnRight}
+        style={{ 
+          width: `${rightWidth}px`,
+          minWidth: '200px',
+          maxWidth: '400px',
+        }}
+      >
         {right}
       </div>
     </div>

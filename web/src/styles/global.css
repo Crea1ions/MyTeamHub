@@ -1,0 +1,16 @@
+/* Import CSS variables (Phase 7 refactoring) */
+@import './variables.css';
+
+/* Global styles for split pane dragging */
+body.dragging-split-pane {
+  user-select: none;
+  cursor: col-resize !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+body.dragging-split-pane * {
+  cursor: col-resize !important;
+  pointer-events: none;
+}

@@ -7,7 +7,7 @@
 }
 
 .container::-webkit-scrollbar {
-  width: 8px;
+  width: var(--scrollbar-width, 8px);
 }
 
 .container::-webkit-scrollbar-track {
@@ -109,8 +109,8 @@
   user-select: none;
 
 &   input {
-    width: 16px;
-    height: 16px;
+    width: var(--icon-size-sm, 16px);
+    height: var(--icon-size-sm, 16px);
     cursor: pointer;
     accent-color: #4c8dff;
   }

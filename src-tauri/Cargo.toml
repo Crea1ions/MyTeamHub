@@ -1,0 +1,31 @@
+[package]
+name = "myteamhub"
+version = "0.1.0"
+description = "MyTeamHub Desktop - Interim Web Desktop with Tauri"
+authors = ["devdipper"]
+edition = "2021"
+rust-version = "1.60"
+build = "build.rs"
+
+[build-dependencies]
+tauri-build = { version = "2.5", features = [] }
+
+[dependencies]
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2.10", features = ["custom-protocol"] }
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = [ "custom-protocol" ]
+custom-protocol = [ "tauri/custom-protocol" ]
+
+[[bin]]
+name = "myteamhub"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true

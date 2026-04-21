@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: var(--spacing-md) var(--spacing-lg);
   border-bottom: 1px solid #30363d;
   background-color: #0d1117;
   flex-shrink: 0;
@@ -32,8 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: var(--icon-size-button-md);
+  height: var(--icon-size-button-md);
   padding: 0;
   border: 1px solid #30363d;
   background: none;
@@ -52,13 +52,13 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  margin: 0 12px;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: 0 var(--spacing-md);
   background-color: #161b22;
   border: 1px solid #30363d;
   border-radius: 6px;
-  margin-top: 8px;
+  margin-top: var(--spacing-sm);
   flex-shrink: 0;
 }
 
@@ -86,8 +86,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: var(--icon-size-button-sm);
+  height: var(--icon-size-button-sm);
   padding: 0;
   background: none;
   border: none;
@@ -106,17 +106,17 @@
 
 /* Stats Bar */
 .statsBar {
-  padding: 0 12px;
+  padding: 0 var(--spacing-md);
   flex-shrink: 0;
 }
 
 .statsButton {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-sm);
   width: 100%;
-  padding: 6px 8px;
-  margin-top: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-top: var(--spacing-xs);
   background-color: #161b22;
   border: 1px solid #30363d;
   border-radius: 4px;
@@ -138,17 +138,17 @@
 }
 
 .statsDetail {
-  padding: 8px 0;
+  padding: var(--spacing-sm) 0;
   font-size: 11px;
   color: #8b949e;
   background-color: #161b22;
   border-radius: 4px;
-  margin-top: 4px;
-  padding: 8px;
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-sm);
 }
 
 .statsDetail p {
-  margin: 4px 0;
+  margin: var(--spacing-xs) 0;
   display: flex;
   justify-content: space-between;
 }
@@ -163,9 +163,9 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px 0;
-  margin: 0 12px;
-  margin-top: 8px;
+  padding: var(--spacing-sm) 0;
+  margin: 0 var(--spacing-md);
+  margin-top: var(--spacing-sm);
 }
 
 .tree {
@@ -180,12 +180,12 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 16px;
+  gap: var(--spacing-lg);
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
+  width: var(--icon-size-button-lg);
+  height: var(--icon-size-button-lg);
   border: 3px solid #30363d;
   border-top-color: #58a6ff;
   border-radius: 50%;
@@ -211,8 +211,8 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 12px;
-  padding: 16px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
 }
 
 .errorText {
@@ -225,8 +225,8 @@
 .retryButton {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   background-color: #238636;
   border: 1px solid #238636;
   border-radius: 6px;
@@ -248,7 +248,7 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 32px 16px;
+  padding: 32px var(--spacing-lg);
   text-align: center;
 }
 
@@ -260,7 +260,7 @@
 
 /* Footer */
 .footer {
-  padding: 8px 12px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border-top: 1px solid #30363d;
   background-color: #0d1117;
   flex-shrink: 0;
@@ -277,7 +277,7 @@
 
 /* Scrollbar styling */
 .treeContainer::-webkit-scrollbar {
-  width: 8px;
+  width: var(--scrollbar-width);
 }
 
 .treeContainer::-webkit-scrollbar-track {

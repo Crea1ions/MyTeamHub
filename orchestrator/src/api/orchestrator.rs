@@ -92,11 +92,14 @@ pub struct AgentInfoResponse {
 }
 
 /// Agent metadata
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AgentMetadata {
     pub id: String,
     pub name: String,
     pub description: String,
+    pub prompt: String,          // Custom system prompt for LLM
+    pub temperature: f32,        // LLM temperature (0.0-1.0)
+    pub enabled: bool,           // Whether agent is active
     pub status: String,
 }
 
@@ -115,6 +118,17 @@ pub struct AgentMetricsResponse {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ArchiveWorkflowRequest {
     pub reason: Option<String>,
+}
+
+/// Create/Update agent request
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateAgentRequest {
+    pub id: Option<String>,  // None for create (generate), Some for update
+    pub name: String,
+    pub description: String,
+    pub prompt: String,
+    pub temperature: Option<f32>,  // Default 0.7 if not provided
+    pub enabled: Option<bool>,     // Default true if not provided
 }
 
 /// Generic API error response

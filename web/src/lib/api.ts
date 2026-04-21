@@ -76,7 +76,7 @@ class OrchestratorClient {
   constructor() {
     this.client = axios.create({
       baseURL: ORCHESTRATOR_API_BASE,
-      timeout: 30000,
+      timeout: 120000, // Increased from 30s to 120s (2 minutes) to allow for complex LLM queries
     });
 
     // Add error interceptor
@@ -197,6 +197,7 @@ class OrchestratorClient {
   // Returns response directly from LLM without workflow polling
   // Now includes editor context for agents to reason about user's work
   // Supports cancellation via AbortSignal
+  // Now accepts optional agent prompt parameter for custom agent instructions
   async directChat(
     message: string,
     agentId?: string,
@@ -207,14 +208,38 @@ class OrchestratorClient {
       project_id: string;
       line_count: number;
     },
-    abortSignal?: AbortSignal
+    abortSignal?: AbortSignal,
+    agentPrompt?: string  // Custom agent prompt - will override default
   ): Promise<{ response: string; agent: string; model: string }> {
     try {
+      // Get API key from localStorage (configured in Settings)
+      const configJson = localStorage.getItem('myteamhub-api-config');
+      let apiKey = '';
+      
+      if (configJson) {
+        try {
+          const config = JSON.parse(configJson);
+          apiKey = config.mistralApiKey || ''; // Note: saved as 'mistralApiKey' in APIConfig.tsx
+        } catch (e) {
+          console.warn('Failed to parse API config from localStorage', e);
+        }
+      }
+
+      if (!apiKey) {
+        throw new Error('Mistral API key not configured. Please set it in Settings.');
+      }
+
       const payload: any = {
         message,
+        apiKey, // Send API key directly to proxy
         agent: agentId || 'collaborator',
         temperature: temperature || 0.7,
       };
+
+      // Add custom agent prompt if provided
+      if (agentPrompt) {
+        payload.prompt = agentPrompt;
+      }
 
       // Add editor context if provided
       if (editorContext) {
@@ -226,7 +251,14 @@ class OrchestratorClient {
         config.signal = abortSignal;
       }
 
-      const response = await this.client.post('/api/chat', payload, config);
+      // Use proxy LLM instead of orchestrator
+      // Proxy is at http://localhost:3001, frontend is at :3000
+      const proxyClient = axios.create({
+        baseURL: 'http://localhost:3001',
+        timeout: 120000,
+      });
+
+      const response = await proxyClient.post('/api/chat', payload, config);
       return response.data;
     } catch (error) {
       console.error('Failed to call direct chat:', error);
@@ -247,9 +279,71 @@ class OrchestratorClient {
   async listVaultFiles(directory: string = '.'): Promise<VaultFile[]> {
     try {
       const response = await this.client.get('/vault/files', { params: { directory } });
-      return response.data.files || [];
+      const paths: string[] = response.data.files || [];
+      
+      // Convert string paths to VaultFile objects
+      return paths.map(path => ({
+        id: path,
+        path: path,
+        type: path.endsWith('.md') ? 'file' : 'folder',
+        title: path.split('/').pop() || path,
+        created: new Date().toISOString(),
+        updated: new Date().toISOString(),
+      }));
     } catch (error) {
       console.error('Failed to list vault files:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Recursively list all files in vault, including nested directories
+   * Used for building complete knowledge graph with all .md files
+   * Uses sequential requests to avoid overwhelming the server
+   */
+  async listVaultFilesRecursive(directory: string = '.'): Promise<VaultFile[]> {
+    try {
+      const allFiles: VaultFile[] = [];
+      const visited = new Set<string>();
+      const queue: string[] = [directory];
+      
+      // Process directories sequentially to avoid overwhelming the server
+      while (queue.length > 0) {
+        const dir = queue.shift()!;
+        if (visited.has(dir)) continue;
+        visited.add(dir);
+        
+        try {
+          const response = await this.client.get('/vault/files', { params: { directory: dir } });
+          const paths: string[] = response.data.files || [];
+          
+          for (const path of paths) {
+            const fullPath = dir === '.' ? path : `${dir}/${path}`;
+            
+            if (path.endsWith('.md')) {
+              // It's a markdown file
+              allFiles.push({
+                id: fullPath,
+                path: fullPath,
+                type: 'file',
+                title: path.split('/').pop() || path,
+                created: new Date().toISOString(),
+                updated: new Date().toISOString(),
+              });
+            } else if (!path.includes('.')) {
+              // Likely a folder (no extension), add to queue for exploration
+              queue.push(fullPath);
+            }
+          }
+        } catch (error) {
+          console.warn(`Could not explore directory ${dir}:`, error);
+        }
+      }
+      
+      console.log(`📂 Found ${allFiles.length} .md files recursively`);
+      return allFiles;
+    } catch (error) {
+      console.error('Failed to recursively list vault files:', error);
       throw error;
     }
   }
@@ -346,6 +440,46 @@ class OrchestratorClient {
     }
   }
 
+  /**
+   * Load vault structure from a specific directory (for Studio, etc)
+   * Returns only files/folders within that directory
+   * @param directory - Vault directory path (e.g., '00-Inbox/myteam-studio')
+   */
+  async loadVaultStructureFromDirectory(directory: string): Promise<{ files: string[]; metadata?: Record<string, any> }> {
+    try {
+      // Use recursive listing for the specific directory
+      const vaultFiles = await this.listVaultFilesRecursive(directory);
+      
+      // Extract just the relative paths (without the directory prefix)
+      const paths = vaultFiles.map(f => {
+        const relative = f.path.startsWith(directory + '/') 
+          ? f.path.substring(directory.length + 1)
+          : f.path;
+        return relative;
+      });
+      
+      console.log(`📁 Loaded ${paths.length} items from ${directory}`);
+      
+      // Build metadata
+      const metadata: Record<string, any> = {};
+      vaultFiles.forEach(file => {
+        const relative = file.path.startsWith(directory + '/') 
+          ? file.path.substring(directory.length + 1)
+          : file.path;
+        metadata[relative] = {
+          agent: undefined,
+          created_at: file.created,
+          links: [],
+        };
+      });
+
+      return { files: paths, metadata };
+    } catch (error) {
+      console.error(`Failed to load vault structure from directory ${directory}:`, error);
+      throw error;
+    }
+  }
+
   async getVaultTree(vaultPath: string): Promise<any> {
     try {
       return this.loadVaultStructure(vaultPath);
@@ -431,6 +565,7 @@ export const orchestratorClient = new OrchestratorClient();
 
 // Export methods as named functions for convenience
 export const loadVaultStructure = (vaultPath: string) => orchestratorClient.loadVaultStructure(vaultPath);
+export const loadVaultStructureFromDirectory = (directory: string) => orchestratorClient.loadVaultStructureFromDirectory(directory);
 export const getVaultTree = (vaultPath: string) => orchestratorClient.getVaultTree(vaultPath);
 export const extractLinksFromContent = (content: string) => orchestratorClient.extractLinksFromContent(content);
 export const parseVaultFileMetadata = (content: string) => orchestratorClient.parseVaultFileMetadata(content);

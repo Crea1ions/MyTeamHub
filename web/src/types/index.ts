@@ -1,12 +1,13 @@
 // File system types
 export interface ProjectFile {
   id: string;
-  path: string;
+  path?: string;
   name: string;
-  content: string;
+  content?: string;
   type: 'file' | 'folder';
   children?: ProjectFile[];
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Project {
@@ -21,8 +22,10 @@ export interface Agent {
   id: string;
   name: string;
   description: string;
-  prompt: string;
-  enabled: boolean;
+  prompt: string;          // System prompt for LLM
+  temperature: number;     // LLM temperature (0.0-1.0)
+  enabled: boolean;        // Whether agent is active
+  status?: string;         // "ready", "disabled", etc
 }
 
 export interface ChatMessage {
@@ -59,6 +62,7 @@ export interface GraphNode {
   label: string;
   type: 'note' | 'session' | 'output' | 'agent';
   position?: { x: number; y: number };
+  path?: string;  // File path for category-based coloring
 }
 
 export interface GraphEdge {

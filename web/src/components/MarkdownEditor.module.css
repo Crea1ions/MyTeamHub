@@ -34,8 +34,8 @@
 .saveToVaultButton {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: var(--spacing-6, 6px);
+  padding: var(--spacing-6, 6px) var(--spacing-lg, 12px);
   background-color: #0066cc;
   color: #e6edf3;
   border: none;
@@ -61,8 +61,8 @@
 }
 
 .saveToVaultButton svg {
-  width: 14px;
-  height: 14px;
+  width: var(--icon-size-xs, 14px);
+  height: var(--icon-size-xs, 14px);
 }
 
 @keyframes pulse {
@@ -92,7 +92,7 @@
 }
 
 .editor::-webkit-scrollbar {
-  width: 8px;
+  width: var(--scrollbar-width, 8px);
 }
 
 .editor::-webkit-scrollbar-track {

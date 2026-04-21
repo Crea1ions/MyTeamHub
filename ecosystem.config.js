@@ -28,7 +28,8 @@ module.exports = {
   apps: [
     {
       // Rust Orchestrator
-      // Hosts: LLM agents, vault operations, event processing
+      // Hosts: vault operations, event processing
+      // Note: LLM chat now routes through proxy-llm (:3001)
       name: 'orchestrator',
       cwd: '/home/devdipper/dev/APP/001-APP-MyTeamHub/orchestrator',
       script: './target/release/orchestrator',
@@ -50,6 +51,34 @@ module.exports = {
       error_file: './logs/orchestrator-error.log',
       out_file: './logs/orchestrator-out.log',
       log_file: './logs/orchestrator.log',
+      time: true,
+    },
+
+    {
+      // LLM Proxy (Node.js)
+      // Lightweight proxy for Mistral API chat
+      // Reads API key from frontend localStorage
+      // Direct routing: Frontend → Proxy → Mistral (bypasses Orchestrator)
+      name: 'proxy-llm',
+      cwd: '/home/devdipper/dev/APP/001-APP-MyTeamHub/proxy-llm',
+      script: 'server.js',
+      instances: 1,
+      exec_mode: 'fork',
+      env: {
+        NODE_ENV: 'development',
+        PROXY_PORT: 3001,
+      },
+      // Lifecycle
+      autorestart: true,
+      max_restarts: 10,
+      min_uptime: '10s',
+      max_memory_restart: '256M',
+      listen_timeout: 5000,
+      kill_timeout: 5000,
+      // Logging
+      error_file: './logs/proxy-llm-error.log',
+      out_file: './logs/proxy-llm-out.log',
+      log_file: './logs/proxy-llm.log',
       time: true,
     },
 

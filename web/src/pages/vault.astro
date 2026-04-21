@@ -29,6 +29,20 @@ import VaultScreen from '../components/VaultScreen';
         display: flex;
         flex-direction: column;
       }
+
+      /* Split pane dragging styles */
+      body.dragging-split-pane {
+        user-select: none;
+        cursor: col-resize !important;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      body.dragging-split-pane * {
+        cursor: col-resize !important;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body>

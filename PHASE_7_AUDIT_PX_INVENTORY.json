@@ -1,0 +1,282 @@
+{
+  "metadata": {
+    "phase": "Phase 7 — Stabilisation UI",
+    "audit_date": "2026-04-22",
+    "purpose": "Inventory of hardcoded pixel values in CSS Modules",
+    "scope": "web/src/components/**/*.module.css",
+    "total_files": 18,
+    "total_px_occurrences": 500
+  },
+  "critical_layout_foundation": {
+    "SplitPaneLayout.module.css": {
+      "priority": "🔴 CRITICAL - Layout Architecture",
+      "occurrences": 13,
+      "findings": [
+        {
+          "property": "Layout Structure",
+          "rules": [
+            {
+              "selector": ".columnLeft",
+              "property": "width",
+              "value": "280px",
+              "line": 12,
+              "impact": "FIXED left panel - cannot shrink on mobile",
+              "status": "⚠️ MUST REFACTOR"
+            },
+            {
+              "selector": ".columnCenter",
+              "property": "min-width",
+              "value": "300px",
+              "line": 23,
+              "impact": "Minimum center width - total min layout = 280 + 300 + 200 (right) = 780px",
+              "status": "⚠️ MUST REFACTOR"
+            },
+            {
+              "selector": ".columnRight",
+              "property": "width",
+              "value": "350px",
+              "line": 34,
+              "impact": "DEFAULT right panel width - FIXED",
+              "status": "⚠️ MUST REFACTOR"
+            },
+            {
+              "selector": ".columnRight",
+              "property": "min-width",
+              "value": "200px",
+              "line": 35,
+              "impact": "Minimum right panel - total min layout = 280 + 300 + 200 = 780px",
+              "status": "⚠️ MUST REFACTOR"
+            },
+            {
+              "selector": ".columnRight",
+              "property": "max-width",
+              "value": "600px",
+              "line": 36,
+              "impact": "Maximum right panel - allows resizing up to 600px",
+              "status": "ℹ️ Optional - can keep"
+            },
+            {
+              "selector": ".dividerRight",
+              "property": "width",
+              "value": "4px",
+              "line": 46,
+              "impact": "Draggable divider thickness",
+              "status": "✅ OK - small constant"
+            }
+          ]
+        }
+      ],
+      "root_cause_of_responsive_issues": "LAYOUT RIGID: Left column fixed 280px + Center min-width 300px + Right min-width 200px = 780px minimum required. On mobile <768px, entire layout overflows horizontally. No mobile breakpoints to hide/collapse panels."
+    },
+    "Navigation.module.css": {
+      "priority": "🟡 HIGH - Header Foundation",
+      "occurrences": 5,
+      "findings": [
+        {
+          "selector": ".navbar",
+          "property": "height",
+          "value": "48px",
+          "line": 4,
+          "impact": "Fixed navbar height",
+          "status": "✅ OK - reasonable constant"
+        },
+        {
+          "selector": ".statusDot",
+          "property": "width",
+          "value": "6px",
+          "line": 68,
+          "impact": "Status indicator dot",
+          "status": "✅ OK - icon size"
+        },
+        {
+          "selector": ".statusDot",
+          "property": "height",
+          "value": "6px",
+          "line": 69,
+          "impact": "Status indicator dot",
+          "status": "✅ OK - icon size"
+        }
+      ]
+    }
+  },
+  "high_density_files": {
+    "VaultExplorer.module.css": {
+      "priority": "🔴 CRITICAL - Feature Heavy",
+      "occurrences": 56,
+      "note": "Highest px density - file tree, buttons, spacings, icons",
+      "sample_values": [
+        "width: 28px; (refresh button)",
+        "height: 28px; (refresh button)",
+        "width: 20px; (clear button)",
+        "height: 20px; (clear button)",
+        "width: 32px; (spinner)",
+        "height: 32px; (spinner)",
+        "width: 8px; (scrollbar)",
+        "padding: 12px 16px; (header)",
+        "padding: 8px 12px; (search)",
+        "gap: 8px; (search container)"
+      ]
+    },
+    "ContentViewer.module.css": {
+      "priority": "🔴 CRITICAL - Feature Heavy",
+      "occurrences": 53,
+      "note": "Content display and formatting",
+      "sample_values": [
+        "gap: 8px; (layout)",
+        "font-size: 12px; (text)",
+        "padding: 16px; (spacing)",
+        "margin: 4px; (spacing)"
+      ]
+    },
+    "TreeNode.module.css": {
+      "priority": "🟡 HIGH - Component Dense",
+      "occurrences": 42,
+      "note": "File tree nodes and styling"
+    },
+    "MarkdownLinkRenderer.module.css": {
+      "priority": "🟡 HIGH - Component Dense",
+      "occurrences": 43,
+      "note": "Markdown rendering and link display"
+    }
+  },
+  "CSS_variables_strategy": {
+    "global_tokens_recommended": [
+      {
+        "name": "--layout-left-width",
+        "current_value": "280px",
+        "source": "SplitPaneLayout.module.css",
+        "type": "Layout Constant",
+        "scope": "GLOBAL",
+        "notes": "Left panel fixed width - used in multiple components"
+      },
+      {
+        "name": "--layout-right-width",
+        "current_value": "350px",
+        "source": "SplitPaneLayout.module.css",
+        "type": "Layout Constant",
+        "scope": "GLOBAL",
+        "notes": "Right panel default width - resizable between 200px-600px"
+      },
+      {
+        "name": "--layout-center-min-width",
+        "current_value": "300px",
+        "source": "SplitPaneLayout.module.css",
+        "type": "Layout Constant",
+        "scope": "GLOBAL",
+        "notes": "Center column minimum width"
+      },
+      {
+        "name": "--navbar-height",
+        "current_value": "48px",
+        "source": "Navigation.module.css",
+        "type": "Layout Constant",
+        "scope": "GLOBAL",
+        "notes": "Fixed navbar height"
+      },
+      {
+        "name": "--divider-width",
+        "current_value": "4px",
+        "source": "SplitPaneLayout.module.css",
+        "type": "Layout Constant",
+        "scope": "GLOBAL",
+        "notes": "Draggable divider thickness"
+      },
+      {
+        "name": "--icon-size-sm",
+        "current_value": "6px",
+        "source": "Navigation.module.css, AgentChat.module.css",
+        "type": "Icon Size",
+        "scope": "GLOBAL",
+        "notes": "Small icon/dot size"
+      },
+      {
+        "name": "--icon-size-md",
+        "current_value": "12px",
+        "source": "AgentChat.module.css",
+        "type": "Icon Size",
+        "scope": "GLOBAL",
+        "notes": "Medium icon size"
+      },
+      {
+        "name": "--icon-size-lg",
+        "current_value": "28-32px",
+        "source": "VaultExplorer.module.css",
+        "type": "Icon Size",
+        "scope": "GLOBAL",
+        "notes": "Large icon/button size"
+      },
+      {
+        "name": "--spacing-xs",
+        "current_value": "4px",
+        "source": "ContentViewer.module.css",
+        "type": "Spacing",
+        "scope": "GLOBAL",
+        "notes": "Extra small spacing"
+      },
+      {
+        "name": "--spacing-sm",
+        "current_value": "8px",
+        "source": "VaultExplorer.module.css, ContentViewer.module.css",
+        "type": "Spacing",
+        "scope": "GLOBAL",
+        "notes": "Small spacing - very common"
+      },
+      {
+        "name": "--spacing-md",
+        "current_value": "12px-16px",
+        "source": "VaultExplorer.module.css, ContentViewer.module.css",
+        "type": "Spacing",
+        "scope": "GLOBAL",
+        "notes": "Medium spacing - padding/margins"
+      }
+    ]
+  },
+  "summary": {
+    "responsive_blocking_issues": [
+      {
+        "issue": "Layout minimum width = 780px (280 + 300 + 200)",
+        "severity": "CRITICAL",
+        "components_affected": ["SplitPaneLayout", "Studio", "VaultScreen"],
+        "resolution": "Add mobile breakpoints to hide/collapse sidebars on small screens (Phase 8)"
+      },
+      {
+        "issue": "No @media queries in core layout CSS",
+        "severity": "CRITICAL",
+        "components_affected": ["SplitPaneLayout", "Navigation"],
+        "resolution": "Add responsive breakpoints at 768px, 1024px (Phase 8)"
+      },
+      {
+        "issue": "High px density in feature components",
+        "severity": "MEDIUM",
+        "components_affected": ["VaultExplorer", "ContentViewer", "TreeNode"],
+        "resolution": "Extract to CSS variables (Phase 3), standardize spacing tokens"
+      }
+    ],
+    "phase_7_cleanup_targets": [
+      {
+        "file": "SplitPaneLayout.module.css",
+        "action": "EXTRACT VARIABLES",
+        "priority": "P0",
+        "items": ["280px → --layout-left-width", "350px → --layout-right-width", "300px → --layout-center-min-width"]
+      },
+      {
+        "file": "Navigation.module.css",
+        "action": "EXTRACT VARIABLES",
+        "priority": "P1",
+        "items": ["48px → --navbar-height", "6px → --icon-size-sm"]
+      },
+      {
+        "file": "VaultExplorer.module.css",
+        "action": "STANDARDIZE SPACING",
+        "priority": "P1",
+        "items": ["Extract all padding/margin to --spacing-* variables", "Consolidate icon sizes"]
+      },
+      {
+        "file": "Other .module.css files (16 total)",
+        "action": "BULK REFACTOR",
+        "priority": "P2",
+        "items": ["Apply same variable extraction pattern", "Standardize icon sizes", "Consolidate spacing"]
+      }
+    ]
+  }
+}

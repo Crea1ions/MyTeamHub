@@ -7,7 +7,7 @@
 }
 
 .container::-webkit-scrollbar {
-  width: 8px;
+  width: var(--scrollbar-width, 8px);
 }
 
 .container::-webkit-scrollbar-track {
@@ -17,10 +17,10 @@
 .container::-webkit-scrollbar-thumb {
   background-color: #243244;
   border-radius: 4px;
+}
 
-  &:hover {
-    background-color: #4c8dff;
-  }
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #4c8dff;
 }
 
 .header {
@@ -30,15 +30,15 @@
   position: sticky;
   top: 0;
   z-index: 10;
+}
 
-&   h2 {
-    margin: 0;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #e6edf3;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+.header h2 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e6edf3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .warning {
@@ -57,63 +57,70 @@
 .section {
   padding: 1rem;
   border-bottom: 1px solid #243244;
+}
 
-&   label {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #8b98a5;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-  }
+.section label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8b98a5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
 
-&   input {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #0b0f14;
-    color: #e6edf3;
-    border: 1px solid #243244;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-family: 'JetBrains Mono', monospace;
-    outline: none;
-    transition: all 0.2s;
+.section input {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0b0f14;
+  color: #e6edf3;
+  border: 1px solid #243244;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  transition: all 0.2s;
+}
 
-    &:focus {
-      border-color: #4c8dff;
-      box-shadow: 0 0 0 2px rgba(76, 141, 255, 0.1);
-    }
+.section input:focus {
+  border-color: #4c8dff;
+  box-shadow: 0 0 0 2px rgba(76, 141, 255, 0.1);
+}
 
-    &::placeholder {
-      color: #8b98a5;
-    }
-  }
+.section input::placeholder {
+  color: #8b98a5;
 }
 
 .secretInput {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+}
 
-&   input {
-    flex: 1;
-  }
+.secretInput input {
+  flex: 1;
+}
 
-&   button {
-    padding: 0.75rem;
-    background-color: #162033;
-    color: #8b98a5;
-    border: 1px solid #243244;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
+.secretInput button {
+  padding: 0.75rem;
+  background-color: #162033;
+  color: #8b98a5;
+  border: 1px solid #243244;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    &:hover {
-      background-color: #243244;
-      color: #4c8dff;
-    }
-  }
+.secretInput button:hover {
+  background-color: #243244;
+  color: #4c8dff;
+}
+
+.toggleButton {
+  /* Inherits from .secretInput button */
 }
 
 .pathInput {
@@ -132,6 +139,7 @@
   padding: 1rem;
   border-top: 1px solid #243244;
   background-color: #162033;
+  margin-top: auto;
 }
 
 .testButton {
@@ -145,12 +153,18 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
 
-  &:hover {
-    background-color: #5a99ff;
-  }
+.testButton:hover {
+  background-color: #5a99ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 141, 255, 0.3);
+}
 
-  &:active {
-    background-color: #3d6cbf;
-  }
+.testButton:active {
+  transform: translateY(0);
 }

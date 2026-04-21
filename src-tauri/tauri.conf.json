@@ -1,0 +1,32 @@
+{
+  "productName": "MyTeamHub",
+  "version": "0.1.0",
+  "identifier": "com.myteamhub.app",
+  "build": {
+    "beforeDevCommand": "cd /home/devdipper/dev/APP/001-APP-MyTeamHub/web && npm run dev",
+    "beforeBuildCommand": "cd /home/devdipper/dev/APP/001-APP-MyTeamHub/web && npm run build",
+    "devUrl": "http://localhost:3002",
+    "frontendDist": "/home/devdipper/dev/APP/001-APP-MyTeamHub/web/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "MyTeamHub",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 800,
+        "minHeight": 600,
+        "x": 50,
+        "y": 50,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true
+  }
+}

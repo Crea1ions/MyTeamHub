@@ -25,9 +25,9 @@ export const Navigation: React.FC<NavigationProps> = ({ currentScreen }) => {
       }
     };
 
-    // Poll every 5s
+    // Poll only once on mount, then every 10s (not 5s) to reduce load
     pollStatus();
-    const interval = setInterval(pollStatus, 5000);
+    const interval = setInterval(pollStatus, 10000);
     return () => clearInterval(interval);
   }, []);
 

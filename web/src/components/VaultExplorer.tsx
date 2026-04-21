@@ -64,7 +64,15 @@ export const VaultExplorer: React.FC<VaultExplorerProps> = ({
       setError(null);
 
       // Get vault structure from API
-      const structure = await api.loadVaultStructure(initialVaultPath);
+      // Use directory-specific method if initialVaultPath looks like a directory
+      let structure;
+      if (initialVaultPath && initialVaultPath !== '/vault' && !initialVaultPath.startsWith('/')) {
+        // It's a directory like '00-Inbox/myteam-studio'
+        structure = await api.loadVaultStructureFromDirectory(initialVaultPath);
+      } else {
+        // It's the root vault or legacy path, use normal method
+        structure = await api.loadVaultStructure(initialVaultPath);
+      }
 
       // Build tree from file list
       const builtTree = buildVaultTree(structure.files, structure.metadata);
@@ -113,9 +121,29 @@ export const VaultExplorer: React.FC<VaultExplorerProps> = ({
   // Handle file selection
   const handleSelect = useCallback(
     (path: string) => {
-      onFileSelect?.(path);
+      // If initialVaultPath is a subdirectory (not /vault), prefix the path
+      let fullPath = path;
+      if (initialVaultPath && initialVaultPath !== '/vault' && !initialVaultPath.startsWith('/')) {
+        // It's a directory like '00-Inbox/myteam-studio', prefix the relative path
+        fullPath = `${initialVaultPath}/${path}`;
+      }
+      onFileSelect?.(fullPath);
     },
-    [onFileSelect]
+    [onFileSelect, initialVaultPath]
+  );
+
+  // Handle file open (double-click)
+  const handleOpen = useCallback(
+    (path: string) => {
+      // If initialVaultPath is a subdirectory (not /vault), prefix the path
+      let fullPath = path;
+      if (initialVaultPath && initialVaultPath !== '/vault' && !initialVaultPath.startsWith('/')) {
+        // It's a directory like '00-Inbox/myteam-studio', prefix the relative path
+        fullPath = `${initialVaultPath}/${path}`;
+      }
+      onFileOpen?.(fullPath);
+    },
+    [onFileOpen, initialVaultPath]
   );
 
   // Calculate tree stats
@@ -223,7 +251,7 @@ export const VaultExplorer: React.FC<VaultExplorerProps> = ({
                 onSelect={handleSelect}
                 onExpand={handleExpand}
                 selectedPath={selectedPath}
-                onFileOpen={onFileOpen}
+                onFileOpen={handleOpen}
               />
             ))}
           </div>

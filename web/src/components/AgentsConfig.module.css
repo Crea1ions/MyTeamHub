@@ -7,7 +7,7 @@
 }
 
 .container::-webkit-scrollbar {
-  width: 8px;
+  width: var(--scrollbar-width, 8px);
 }
 
 .container::-webkit-scrollbar-track {
@@ -228,4 +228,174 @@
 
 .hint {
   opacity: 0.7;
+}
+
+.creatingCard {
+  background-color: rgba(76, 141, 255, 0.05);
+  border: 2px solid #4c8dff;
+}
+
+.creatingTitle {
+  margin: 0 0 1rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4c8dff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  font-size: 0.75rem;
+  color: #8b98a5;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.nameInput {
+  padding: 0.75rem;
+  background-color: #0b0f14;
+  color: #e6edf3;
+  border: 1px solid #243244;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: #4c8dff;
+    box-shadow: 0 0 0 2px rgba(76, 141, 255, 0.1);
+  }
+
+  &::placeholder {
+    color: #6b7684;
+  }
+
+  &.inputError {
+    border-color: #ff5c7a;
+    background-color: rgba(255, 92, 122, 0.05);
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(255, 92, 122, 0.1);
+    }
+  }
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: #ff5c7a;
+  font-weight: 500;
+}
+
+.formActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cancelButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #243244;
+  color: #e6edf3;
+  border: 1px solid #4c8dff;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #2d3d4d;
+  }
+}
+
+.temperatureSlider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #4c8dff, #2ee59d);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--icon-size-sm, 16px);
+    height: var(--icon-size-sm, 16px);
+    border-radius: 50%;
+    background-color: #4c8dff;
+    border: 2px solid #0b0f14;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #2ee59d;
+      box-shadow: 0 0 8px rgba(46, 229, 157, 0.3);
+    }
+  }
+
+  &::-moz-range-thumb {
+    width: var(--icon-size-sm, 16px);
+    height: var(--icon-size-sm, 16px);
+    border-radius: 50%;
+    background-color: #4c8dff;
+    border: 2px solid #0b0f14;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #2ee59d;
+      box-shadow: 0 0 8px rgba(46, 229, 157, 0.3);
+    }
+  }
+}
+
+.temperatureValue {
+  color: #4c8dff;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.temperatureHint {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #6b7684;
+  margin-top: 0.25rem;
+}
+
+.temperatureEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: rgba(76, 141, 255, 0.05);
+  border: 1px solid #4c8dff;
+  border-radius: 4px;
+
+  label {
+    font-size: 0.75rem;
+    color: #8b98a5;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+}
+
+.temperatureDisplay {
+  font-size: 0.75rem;
+  color: #6b7684;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #243244;
 }
