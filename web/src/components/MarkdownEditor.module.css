@@ -92,7 +92,7 @@
 }
 
 .editor::-webkit-scrollbar {
-  width: var(--scrollbar-width, 8px);
+  width: 8px;
 }
 
 .editor::-webkit-scrollbar-track {
@@ -102,10 +102,11 @@
 .editor::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-thumb);
   border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
 .editor::-webkit-scrollbar-thumb:hover {
-  background-color: var(--accent-primary);
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 .footer {
@@ -118,4 +119,91 @@
 
 .hint {
   opacity: 0.7;
+}
+
+/* Save Status Feedback */
+.statusArea {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.statusSaving {
+  font-size: 0.75rem;
+  color: #ffa500;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+.statusSaved {
+  font-size: 0.75rem;
+  color: #2ee59d;
+  font-weight: 500;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+.statusError {
+  font-size: 0.75rem;
+  color: #ff5c7a;
+  font-weight: 500;
+}
+
+.lastSaveTime {
+  font-size: 0.7rem;
+  color: #8b98a5;
+  opacity: 0.7;
+}
+
+.errorBox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 92, 122, 0.1);
+  border-left: 3px solid #ff5c7a;
+  margin: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.errorMessage {
+  flex: 1;
+  margin: 0;
+  font-size: 0.75rem;
+  color: #ff5c7a;
+  font-weight: 500;
+}
+
+.retryButton {
+  padding: 0.4rem 0.75rem;
+  background-color: #ff5c7a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.retryButton:hover {
+  background-color: #ff7090;
+  opacity: 0.9;
+}
+
+.retryButton:active {
+  opacity: 0.8;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

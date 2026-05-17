@@ -1,0 +1,21 @@
+/* ========================================
+   PHASE 9 — RESPONSIVE MEDIA QUERIES
+   Global stylesheet for responsive breakpoints
+   Ensures media queries apply to CSS Modules
+   ======================================== */
+
+/* Attribut selector to match CSS Module classes that contain "columnLeft" */
+@media (max-width: 768px) {
+  /* Hide left sidebar on tablet portrait and below */
+  [class*="columnLeft"] {
+    display: none !important;
+  }
+}
+
+/* Hide both sidebars on mobile */
+@media (max-width: 480px) {
+  [class*="columnLeft"],
+  [class*="columnRight"] {
+    display: none !important;
+  }
+}

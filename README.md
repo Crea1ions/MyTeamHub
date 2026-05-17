@@ -58,6 +58,20 @@ Tu es [nom], un assistant spécialisé en [domaine].
 - **myteam** (port 3001) : Backend Express, sert l'UI et l'API
 - **proxy-myteam** (port 3006) : Proxy de rate-limiting pour Mistral API
 
+
+## Extension complémentaire (optionnelle)
+
+MyTeamHub peut se connecter à des agents externes via des extensions locales optionnelles.
+Ces extensions sont complémentaires et ne font pas partie du cœur natif de MyTeamHub.
+Le produit reste complètement fonctionnel sans elles.
+
+- **Arke** est un agent autonome local-first construit sur trois principes :
+  - **L'agent décide, le système soutient** — le LLM est le seul lieu de décision. Le système (Themelios) exécute, trace, isole et valide, mais ne choisit jamais.
+  - **Des modes, pas des prompts** — quatre modes cognitifs (/ask, /search, /plan, /agent) définissent ce que l'agent peut faire, pas ce qu'il est. Chaque mode est un contrat.
+  - **Anti-dérive par conception** — chaque action est tracée, chaque décision est explicite, aucun routage implicite ni sélection d'outil automatique n'a jamais lieu.
+
+  Lorsqu'il est connecté à MyTeamHub via une passerelle locale, Arke devient un participant invité à la table ronde du Studio, conservant toutes ses capacités tout en restant isolé du contexte des autres agents et du Vault MyTeamHub.
+
 ## Variables d'environnement
 Placez les variables d'environnement dans `server/.env` (NE PAS committer les vraies clés).
 

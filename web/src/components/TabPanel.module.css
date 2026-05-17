@@ -9,9 +9,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #1e2632;
+  border-bottom: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
-  padding: 0 var(--spacing-md, 8px);
+  padding: 0 var(--spacing-md);
   min-height: 36px;
   flex-shrink: 0;
 }
@@ -25,14 +25,14 @@
 .tab {
   display: flex;
   align-items: center;
-  gap: var(--spacing-6, 6px);
-  padding: var(--spacing-6, 6px) var(--spacing-lg, 12px);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
   border: none;
   background: none;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   white-space: nowrap;
   transition: all 0.2s ease;
   border-bottom: 2px solid transparent;
@@ -40,13 +40,13 @@
 }
 
 .tab:hover {
-  color: #c9d1d9;
+  color: var(--text-heading);
   background-color: rgba(230, 237, 243, 0.05);
 }
 
 .tab.active {
-  color: #58a6ff;
-  border-bottom-color: #58a6ff;
+  color: var(--border-color-accent);
+  border-bottom-color: var(--border-color-accent);
 }
 
 .label {
@@ -59,14 +59,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--icon-size-md, 20px);
-  height: var(--icon-size-md, 20px);
-  padding: 0 6px;
-  background-color: rgba(88, 166, 255, 0.15);
-  color: #58a6ff;
+  min-width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  padding: 0 var(--spacing-xs);
+  background-color: var(--badge-bg-blue);
+  color: var(--badge-color-blue);
   border-radius: 10px;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
   flex-shrink: 0;
 }
 
@@ -74,8 +74,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--icon-size-lg, 24px);
-  height: var(--icon-size-lg, 24px);
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
   border: none;
   background: none;
   color: var(--text-secondary);
@@ -85,12 +85,12 @@
 }
 
 .closeBtn:hover {
-  color: #ff5c7a;
+  color: var(--accent-danger);
 }
 
 .content {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-lg, 12px);
-  font-size: 13px;
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-base);
 }

@@ -1,0 +1,238 @@
+.messageContainer {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  animation: slideIn 0.3s ease-out;
+}
+
+.userMessage {
+  justify-content: flex-end;
+}
+
+.assistantMessage {
+  justify-content: flex-start;
+}
+
+.avatar {
+  display: flex;
+  align-items: flex-end;
+  width: var(--icon-size-lg, 32px);
+  height: var(--icon-size-lg, 32px);
+  border-radius: var(--radius-full);
+  background-color: rgba(76, 141, 255, 0.1);
+  flex-shrink: 0;
+  font-size: 1rem;
+  justify-content: center;
+}
+
+.agentIcon,
+.userIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  max-width: 65%;
+}
+
+.userMessage .messageContent {
+  align-items: flex-end;
+}
+
+.assistantMessage .messageContent {
+  align-items: flex-start;
+}
+
+/* Metadata for agent messages (name + timestamp) */
+.messageMetadata {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+  font-size: 0.75rem;
+}
+
+/* Legacy messageHeader for compatibility */
+.messageHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+  font-size: 0.75rem;
+}
+
+.agentName {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.timestamp {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* User timestamp (below message) */
+.userTimestamp {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  padding: 0 var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.bubble {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg, 12px);
+  word-wrap: break-word;
+  word-break: break-word;
+  position: relative;
+  display: inline-block;
+}
+
+.userBubble {
+  background-color: var(--chat-user-bg, #0066cc);
+  color: var(--text-primary);
+  border: 1px solid rgba(76, 141, 255, 0.3);
+  max-width: 100%;
+}
+
+.assistantBubble {
+  background-color: var(--chat-assistant-bg, #1a2332);
+  color: var(--text-primary);
+  border: 1px solid rgba(76, 141, 255, 0.15);
+  max-width: 100%;
+}
+
+/* Ensure proper inline display for bubbles */
+.userMessage .bubble {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.assistantMessage .bubble {
+  display: block;
+}
+
+/* Markdown rendering inside bubbles */
+.bubble :global(p) {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.bubble :global(ul),
+.bubble :global(ol) {
+  margin: var(--spacing-sm) 0;
+  padding-left: var(--spacing-lg);
+}
+
+.bubble :global(li) {
+  margin: var(--spacing-xs) 0;
+}
+
+.bubble :global(code) {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+
+.bubble :global(pre) {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: var(--spacing-md);
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: var(--spacing-sm) 0;
+}
+
+.bubble :global(pre code) {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.bubble :global(blockquote) {
+  border-left: 3px solid var(--accent-primary);
+  padding-left: var(--spacing-md);
+  margin: var(--spacing-sm) 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bubble :global(a) {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.bubble :global(a:hover) {
+  text-decoration: underline;
+}
+
+.statusIndicator {
+  font-size: 0.65rem;
+  margin-left: var(--spacing-xs);
+  vertical-align: super;
+}
+
+.statusIndicator.sending {
+  animation: pulse 1s infinite;
+}
+
+.statusIndicator.sent {
+  color: var(--accent-success);
+}
+
+.statusIndicator.error {
+  color: #ff5c7a;
+}
+
+.streamingIndicator {
+  display: inline-block;
+  margin-right: var(--spacing-sm);
+  animation: blink 1s infinite;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0.3;
+  }
+}
+
+/* Responsive: smaller bubbles on narrow screens */
+@media (max-width: 768px) {
+  .messageContent {
+    max-width: 85%;
+  }
+
+  .bubble {
+    padding: var(--spacing-md) var(--spacing-md);
+  }
+}

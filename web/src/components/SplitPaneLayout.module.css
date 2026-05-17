@@ -11,6 +11,7 @@
 .columnLeft {
   flex-shrink: 0;
   width: var(--layout-left-width);
+  min-width: 0;  /* CRITICAL: Allow flexbox to respect width: 0 on responsive breakpoints */
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
   overflow-x: hidden;
@@ -32,7 +33,7 @@
 .columnRight {
   flex-shrink: 0;
   width: var(--layout-right-width);
-  min-width: var(--layout-right-min-width);
+  min-width: var(--layout-right-min-width);  /* Responsive: 0 on mobile, 180px on tablet+ */
   max-width: var(--layout-right-max-width); /* Increased from 400px to allow wider resizing */
   overflow-y: auto;
   overflow-x: hidden;

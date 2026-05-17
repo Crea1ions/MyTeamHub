@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SplitPaneLayout } from './SplitPaneLayout';
 import { VaultExplorer } from './VaultExplorer';
-import { ContentViewer } from './ContentViewer';
+import { MarkdownEditor } from './MarkdownEditor';
 import { AgentChat } from './AgentChat';
+import { ContentViewer } from './ContentViewer';
 import { orchestratorClient } from '../lib/api';
 import { useWorkflowPolling } from '../lib/hooks/useWorkflowPolling';
 import { parseFrontmatter } from '../lib/frontmatter-parser';
@@ -26,31 +27,47 @@ export const Studio: React.FC<StudioProps> = () => {
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null);
+  const [shareEditorContext, setShareEditorContext] = useState<boolean>(false);
+  const [arkeSessionId, setArkeSessionId] = useState<string>('');
+  
+  // Save state management for Content Studio
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [lastSaveTime, setLastSaveTime] = useState<Date | null>(null);
 
-  // Load real agents from localStorage first, then orchestrator
+  // Load real agents from orchestrator
+  useEffect(() => {
+    const existing = localStorage.getItem('myteamhub-arke-session-id');
+    if (existing) {
+      setArkeSessionId(existing);
+      return;
+    }
+    const generated = `myth_${Date.now()}`;
+    localStorage.setItem('myteamhub-arke-session-id', generated);
+    setArkeSessionId(generated);
+  }, []);
+
   useEffect(() => {
     const loadAgents = async () => {
       try {
-        // Try to load from localStorage first (user-configured agents)
-        const savedAgents = localStorage.getItem('myteamhub-agents');
-        if (savedAgents) {
-          try {
-            const parsedAgents = JSON.parse(savedAgents);
-            setAgents(parsedAgents);
-            if (parsedAgents.length > 0) {
-              setSelectedAgentId(parsedAgents[0].id);
-            }
-            return;
-          } catch (e) {
-            console.warn('Failed to parse saved agents from localStorage:', e);
-          }
-        }
-        
-        // Fallback to orchestrator
         const loadedAgents = await orchestratorClient.listAgents();
-        setAgents(loadedAgents);
-        if (loadedAgents.length > 0) {
-          setSelectedAgentId(loadedAgents[0].id);
+        const withArke = loadedAgents.some((a) => a.id === 'arke')
+          ? loadedAgents
+          : [
+              ...loadedAgents,
+              {
+                id: 'arke',
+                name: 'Arke',
+                description: 'Agent autonome local (gateway MyTeamHub).',
+                prompt: '',
+                temperature: 0.7,
+                enabled: true,
+                status: 'ready',
+              },
+            ];
+        setAgents(withArke);
+        if (withArke.length > 0) {
+          setSelectedAgentId(withArke[0].id);
         }
       } catch (error) {
         console.error('Failed to load agents:', error);
@@ -172,37 +189,24 @@ export const Studio: React.FC<StudioProps> = () => {
 
   const workflowState = useWorkflowPolling(activeWorkflowId, handleWorkflowComplete);
 
-  // Handle file change and save
+  // Handle file save
   const handleFileChange = (content: string) => {
     setEditorContent(content);
-  };
-
-  const handleFileSave = async (path: string, content: string) => {
-    try {
-      console.log('💾 Saving file:', path);
-      await orchestratorClient.writeVaultFile(path, content);
-      
-      // Update note state
-      setSelectedNote((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          content: content,
-          updatedAt: new Date(),
-        };
-      });
-      
-      // Update editor content
-      setEditorContent(content);
-      console.log('✅ File saved successfully:', path);
-    } catch (error) {
-      console.error('❌ Error saving file:', error);
-      throw error;
+    // Mark as unsaved when content changes
+    if (saveStatus === 'saved') {
+      setSaveStatus('idle');
     }
   };
 
-  const handleFileSaveOld = async () => {
-    if (!selectedNote) return;
+  const handleFileSave = async () => {
+    if (!selectedNote) {
+      setSaveError('No file selected');
+      setSaveStatus('error');
+      return;
+    }
+
+    setSaveStatus('saving');
+    setSaveError(null);
 
     try {
       // Save to vault
@@ -219,10 +223,22 @@ export const Studio: React.FC<StudioProps> = () => {
         };
       });
       
+      // Set saved status and clear after 3 seconds
+      setSaveStatus('saved');
+      setLastSaveTime(new Date());
       console.log('✅ File saved successfully:', selectedPath);
+      
+      // Auto-reset to idle after 3 seconds
+      const timer = setTimeout(() => {
+        setSaveStatus('idle');
+      }, 3000);
+      
+      return () => clearTimeout(timer);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setSaveError(errorMessage);
+      setSaveStatus('error');
       console.error('❌ Error saving file:', error);
-      throw error;
     }
   };
 
@@ -236,30 +252,27 @@ export const Studio: React.FC<StudioProps> = () => {
     };
     setMessages((prev) => [...prev, userMessage]);
 
-    // Create editor context for agent using note content
-    const editorContext = selectedNote ? {
-      editor_content: selectedNote.content,
+    // Create editor context for agent
+    const editorContext = (shareEditorContext && selectedNote) ? {
+      editor_content: editorContent,
       file_name: selectedNote.title,
       project_id: '00-Inbox/myteam-studio',
-      line_count: selectedNote.content.split('\n').length,
+      line_count: editorContent.split('\n').length,
     } : undefined;
 
     try {
       const controller = new AbortController();
       setAbortController(controller);
 
-      // Find selected agent to get its custom prompt and temperature
-      const selectedAgent = agents.find(a => a.id === selectedAgentId);
-      const agentPrompt = selectedAgent && 'prompt' in selectedAgent ? (selectedAgent as any).prompt : undefined;
-      const agentTemperature = selectedAgent && 'temperature' in selectedAgent ? (selectedAgent as any).temperature : undefined;
-
       const response = await orchestratorClient.directChat(
         message,
         selectedAgentId,
-        agentTemperature,  // Pass agent's configured temperature
+        undefined, // temperature
         editorContext,
         controller.signal,
-        agentPrompt  // Pass custom agent prompt if available
+        undefined,
+        shareEditorContext,
+        selectedAgentId === 'arke' ? arkeSessionId : undefined,
       );
 
       const assistantMessage: ChatMessage = {
@@ -314,18 +327,29 @@ export const Studio: React.FC<StudioProps> = () => {
         />
       }
       center={
-        // Use ContentViewer - same as Vault page!
-        <ContentViewer
-          note={selectedNote}
-          isLoading={isLoadingContent}
-          onLinkClick={(link) => {
-            // Handle wikilink clicks - navigate to that file
-            const target = link.target.endsWith('.md') ? link.target : link.target + '.md';
-            const fullPath = `00-Inbox/myteam-studio/${target}`;
-            setSelectedPath(fullPath);
-          }}
-          onContentSave={handleFileSave}
-        />
+        // Editor for selected file
+        selectedNote ? (
+          <MarkdownEditor
+            fileName={selectedNote.title}
+            content={editorContent}
+            onChange={handleFileChange}
+            onSave={handleFileSave}
+            saveStatus={saveStatus}
+            saveError={saveError}
+            lastSaveTime={lastSaveTime}
+          />
+        ) : (
+          <div style={{ padding: '20px', color: '#999' }}>
+            {selectedPath ? (
+              <>
+                <p>📁 {selectedPath}</p>
+                <p>Select a markdown file to edit</p>
+              </>
+            ) : (
+              <p>Select a file from the explorer to start editing</p>
+            )}
+          </div>
+        )
       }
       right={
         <AgentChat
@@ -335,7 +359,10 @@ export const Studio: React.FC<StudioProps> = () => {
           messages={messages}
           onSendMessage={handleSendMessage}
           onStop={handleStopMessage}
-          isLoading={abortController !== null}
+          isSending={abortController !== null}
+          shareEditorContext={shareEditorContext}
+          onToggleShareEditorContext={setShareEditorContext}
+          canShareEditorContext={Boolean(selectedNote)}
         />
       }
     />

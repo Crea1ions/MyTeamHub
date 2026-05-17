@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Zap, BarChart3 } from 'lucide-react';
 import { orchestratorClient } from '../lib/api';
 import styles from './Navigation.module.css';
 
@@ -33,52 +32,57 @@ export const Navigation: React.FC<NavigationProps> = ({ currentScreen }) => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.brand}>
-        <span className={styles.logo}>🧠</span>
-        <span className={styles.title}>MyTeamHub</span>
+      {/* Left: Brand + Tagline */}
+      <div className={styles.leftSection}>
+        <div className={styles.brand}>
+          <span className={styles.logo}>🎲</span>
+          <div className={styles.brandText}>
+            <span className={styles.title}>MyTeamHub</span>
+            <span className={styles.tagline}>Think • Create • Build</span>
+          </div>
+        </div>
+
+        {/* Navigation Items */}
+        <div className={styles.navItems}>
+          <a
+            href="/studio"
+            className={`${styles.navItem} ${currentScreen === 'studio' ? styles.active : ''}`}
+            title="Studio - Collaborative development"
+          >
+            <span>Studio</span>
+          </a>
+
+          <a
+            href="/vault"
+            className={`${styles.navItem} ${currentScreen === 'vault' ? styles.active : ''}`}
+            title="Vault - Cognitive memory"
+          >
+            <span>Vault</span>
+          </a>
+
+          <a
+            href="/config"
+            className={`${styles.navItem} ${currentScreen === 'config' ? styles.active : ''}`}
+            title="Config - System settings"
+          >
+            <span>Settings</span>
+          </a>
+        </div>
       </div>
 
-      <div className={styles.navItems}>
-        <a
-          href="/studio"
-          className={`${styles.navItem} ${currentScreen === 'studio' ? styles.active : ''}`}
-          title="Studio - Collaborative development"
-        >
-          <Zap size={16} />
-          <span>Studio</span>
-        </a>
-
-        <a
-          href="/vault"
-          className={`${styles.navItem} ${currentScreen === 'vault' ? styles.active : ''}`}
-          title="Vault - Cognitive memory"
-        >
-          <BarChart3 size={16} />
-          <span>Vault</span>
-        </a>
-
-        <a
-          href="/config"
-          className={`${styles.navItem} ${currentScreen === 'config' ? styles.active : ''}`}
-          title="Config - System settings"
-        >
-          <Settings size={16} />
-          <span>Settings</span>
-        </a>
-      </div>
-
-      <div className={styles.status}>
-        <div
-          className={styles.statusDot}
-          style={{
-            backgroundColor: isOnline ? '#2EE59D' : '#FF5C7A',
-            animation: isOnline ? 'pulse 2s infinite' : 'none',
-          }}
-          title={`Orchestrator: ${statusText}`}
-        />
-        <span title={`${workflowCount} active workflow${workflowCount !== 1 ? 's' : ''}`}>
-          {statusText}
-        </span>
+      {/* Right: System Status Indicator Only */}
+      <div className={styles.rightSection}>
+        {/* Status Indicator - Critical Element */}
+        <div className={styles.status}>
+          <div
+            className={styles.statusDot}
+            style={{
+              backgroundColor: isOnline ? '#2EE59D' : '#FF5C7A',
+            }}
+            title={`Orchestrator: ${statusText}`}
+          />
+          <span className={styles.statusText}>{statusText}</span>
+        </div>
       </div>
     </nav>
   );

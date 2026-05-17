@@ -70,6 +70,49 @@ export interface OrchestratorStatusResponse {
   version: string;
 }
 
+/**
+ * Retry helper with exponential backoff
+ * Retries a function up to maxRetries times with exponential delay
+ * @param fn - Async function to retry
+ * @param maxRetries - Maximum number of retries (default: 3)
+ * @param initialDelay - Initial delay in ms (default: 1000)
+ * @param onRetry - Optional callback to report retry attempts
+ */
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  initialDelay: number = 1000,
+  onRetry?: (attempt: number, delay: number, error: Error) => void
+): Promise<T> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      // Don't retry on the last attempt
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+
+      // Calculate exponential backoff: initialDelay * 2^attempt
+      const delay = initialDelay * Math.pow(2, attempt);
+      
+      // Call optional retry callback
+      if (onRetry) {
+        onRetry(attempt + 1, delay, lastError);
+      }
+
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError || new Error('Unknown error in retryWithBackoff');
+}
+
 class OrchestratorClient {
   private client: AxiosInstance;
 
@@ -132,14 +175,18 @@ class OrchestratorClient {
   }
 
   async listAgents(): Promise<Agent[]> {
-    try {
-      const response = await this.client.get('/orchestrator/agents');
-      // API returns { agents: [...], total: N }
-      return response.data.agents || [];
-    } catch (error) {
-      console.error('Failed to list agents:', error);
-      throw error;
-    }
+    return retryWithBackoff(
+      async () => {
+        const response = await this.client.get('/orchestrator/agents');
+        // API returns { agents: [...], total: N }
+        return response.data.agents || [];
+      },
+      3, // maxRetries
+      1000, // initialDelay
+      (attempt, delay, error) => {
+        console.warn(`🔄 Retrying listAgents (attempt ${attempt}/3) after ${delay}ms. Error: ${error.message}`);
+      }
+    );
   }
 
   async submitEvent(eventData: {
@@ -209,7 +256,9 @@ class OrchestratorClient {
       line_count: number;
     },
     abortSignal?: AbortSignal,
-    agentPrompt?: string  // Custom agent prompt - will override default
+    agentPrompt?: string,  // Custom agent prompt - will override default
+    shareEditorContext?: boolean,
+    sessionId?: string,
   ): Promise<{ response: string; agent: string; model: string }> {
     try {
       // Get API key from localStorage (configured in Settings)
@@ -225,7 +274,7 @@ class OrchestratorClient {
         }
       }
 
-      if (!apiKey) {
+      if (!apiKey && (agentId || 'collaborator') !== 'arke') {
         throw new Error('Mistral API key not configured. Please set it in Settings.');
       }
 
@@ -235,6 +284,12 @@ class OrchestratorClient {
         agent: agentId || 'collaborator',
         temperature: temperature || 0.7,
       };
+
+      if (sessionId) {
+        payload.session_id = sessionId;
+      }
+
+      payload.share_editor_context = Boolean(shareEditorContext);
 
       // Add custom agent prompt if provided
       if (agentPrompt) {
@@ -258,8 +313,24 @@ class OrchestratorClient {
         timeout: 120000,
       });
 
-      const response = await proxyClient.post('/api/chat', payload, config);
-      return response.data;
+      // Retry with exponential backoff, but respect abortSignal
+      return await retryWithBackoff(
+        async () => {
+          // Check if already aborted before retrying
+          if (abortSignal?.aborted) {
+            throw new Error('Request was cancelled');
+          }
+          const response = await proxyClient.post('/api/chat', payload, config);
+          return response.data;
+        },
+        3, // maxRetries
+        1000, // initialDelay
+        (attempt, delay, error) => {
+          if (!abortSignal?.aborted) {
+            console.warn(`🔄 Retrying chat (attempt ${attempt}/3) after ${delay}ms. Error: ${error.message}`);
+          }
+        }
+      );
     } catch (error) {
       console.error('Failed to call direct chat:', error);
       throw error;

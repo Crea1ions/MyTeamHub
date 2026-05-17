@@ -38,17 +38,53 @@
   --spacing-md: 12px;                   /* Medium (standard padding) */
   --spacing-lg: 16px;                   /* Large (header padding, container padding) */
   --spacing-xl: 24px;                   /* Extra large (section margins) */
+  --spacing-2xl: 32px;                  /* 2X large (large margins) */
+
+  /* ===== TYPOGRAPHY SYSTEM ===== */
+  /* Font sizes - 4-tier scale for consistency */
+  --font-size-xs: 11px;                 /* Extra small (meta text, stats) */
+  --font-size-sm: 12px;                 /* Small (labels, badges, secondary text) */
+  --font-size-base: 13px;               /* Base/body text */
+  --font-size-md: 14px;                 /* Medium (titles, emphasis) */
+  --font-size-lg: 16px;                 /* Large (section headers) */
+  --font-size-xl: 20px;                 /* Extra large (page headers) */
+  --font-size-2xl: 24px;                /* 2X large (main titles) */
+
+  /* Font weights */
+  --font-weight-normal: 400;            /* Normal weight */
+  --font-weight-medium: 500;            /* Medium weight */
+  --font-weight-semibold: 600;          /* Semi-bold (headings) */
+  --font-weight-bold: 700;              /* Bold */
+
+  /* Line heights */
+  --line-height-tight: 1.4;             /* Tight (headings) */
+  --line-height-normal: 1.6;            /* Normal (body text) */
+
+  /* ===== BORDER RADIUS ===== */
+  /* Rounded corners - 3-tier system */
+  --radius-sm: 3px;                     /* Small radius (tight elements) */
+  --radius-md: 4px;                     /* Medium radius (buttons, inputs) */
+  --radius-lg: 6px;                     /* Large radius (containers, cards) */
+  --radius-full: 50%;                   /* Full circular */
 
   /* ===== UI ELEMENT DIMENSIONS ===== */
   /* Scrollbars */
   --scrollbar-width: 8px;               /* All components with ::-webkit-scrollbar */
   
+  /* Container heights */
+  --height-secondary-panel: 200px;      /* Secondary panels height */
+  --height-secondary-panel-min: 150px;  /* Minimum height */
+  --height-secondary-panel-max: 300px;  /* Maximum height */
+  
   /* Modals & containers */
   --modal-max-width: 600px;             /* VaultFilePickerModal.modal */
+  --panel-padding-horizontal: 16px;     /* Horizontal padding for main panels */
   
   /* Borders & dividers */
   --border-color: #1e2632;              /* Consistent border color */
   --border-thickness: 1px;              /* Standard border thickness */
+  --border-color-light: #30363d;        /* Lighter border for inputs/secondary elements */
+  --border-color-accent: #58a6ff;       /* Accent blue for hover states */
 
   /* ===== COLOR THEME (DARK MODE) ===== */
   /* Backgrounds */
@@ -56,37 +92,55 @@
   --bg-secondary: #111826;              /* Secondary backgrounds (inputs, panels) */
   --bg-tertiary: #161b22;               /* Tertiary (hover states, cards) */
   --bg-navbar: #162033;                 /* Navigation bar background */
-  --bg-hover: #0d1117;                  /* Hover overlay */
+  --bg-hover: #0d1117;                  /* Hover overlay (darker than primary) */
+  --bg-light: #161b22;                  /* Light background alternative */
 
   /* Text Colors */
   --text-primary: #e6edf3;              /* Primary text (light gray-white) */
   --text-secondary: #8b949e;            /* Secondary text (medium gray) */
   --text-muted: #6e7681;                /* Muted text (darker gray) */
   --text-on-primary: #ffffff;           /* Text on primary buttons (pure white) */
+  
+  /* Specific text colors used in components */
+  --text-heading: #c9d1d9;              /* Heading text (brighter) */
+  --text-light: #79c0ff;                /* Lighter text for emphasis */
+  --text-lighter: #a5d6ff;              /* Even lighter for secondary headings */
 
   /* Accent Colors */
   --accent-primary: #4c8dff;            /* Primary accent (blue) */
+  --accent-primary-alt: #58a6ff;        /* Alternative accent blue (lighter) */
   --accent-success: #2ee59d;            /* Success/active (green) */
   --accent-warning: #fb923c;            /* Warning (orange) */
   --accent-danger: #f85149;             /* Danger/error (red) */
   --accent-purple: #a78bfa;             /* Secondary accent (purple) */
+  --accent-green: #238636;              /* Green button background */
+  --accent-green-hover: #2ea043;        /* Green button hover */
 
-  /* Component Colors */
+  /* Component-specific colors */
   --scrollbar-track: transparent;       /* Scrollbar track (see-through) */
   --scrollbar-thumb: #243244;           /* Scrollbar thumb (light gray) */
+  --scrollbar-thumb-alt: #30363d;       /* Alternative scrollbar color */
   --scrollbar-thumb-hover: #4c8dff;     /* Scrollbar thumb on hover (blue) */
+  --scrollbar-thumb-hover-alt: #484f58; /* Alternative scrollbar hover */
   
   /* Input/Form Elements */
   --input-bg: #0b0f14;                  /* Input background */
   --input-border: #30363d;              /* Input border */
   --input-text: #e6edf3;                /* Input text */
   --input-placeholder: #6e7681;         /* Input placeholder */
+  --input-bg-hover: #161b22;            /* Input background hover */
   
   /* Buttons */
   --button-primary-bg: #4c8dff;         /* Primary button background */
   --button-primary-text: #ffffff;       /* Primary button text */
   --button-secondary-bg: #0d1117;       /* Secondary button background */
   --button-secondary-text: #8b949e;     /* Secondary button text */
+  --button-hover-bg: #30363d;           /* Button hover background */
+  
+  /* Component backgrounds and overlays */
+  --badge-bg-blue: rgba(88, 166, 255, 0.15);    /* Blue badge background */
+  --badge-color-blue: #58a6ff;                   /* Blue badge text */
+  --badge-border-blue: rgba(88, 166, 255, 0.3); /* Blue badge border */
   
   /* Chat Bubbles */
   --chat-user-bg: rgba(76, 141, 255, 0.15);    /* User message background (blue tint) */
@@ -95,6 +149,110 @@
   /* Status & Indicators */
   --status-online: #2ee59d;             /* Online status (green) */
   --status-offline: #8b949e;            /* Offline status (gray) */
+}
+
+/* ========================================
+   PHASE 9 — RESPONSIVE BREAKPOINTS
+   Adaptive layout for different screen sizes
+   ======================================== */
+
+/* TABLET LANDSCAPE (1024px and below) */
+/* Compress sidebar and right panel, maintain 3-column */
+@media (max-width: 1024px) {
+  :root {
+    --layout-left-width: 200px;           /* Compress sidebar from 280px */
+    --layout-center-min-width: 250px;     /* Reduce center minimum */
+    --layout-right-width: 300px;          /* Compress right panel from 350px */
+    --layout-right-min-width: 180px;      /* Reduce right minimum */
+  }
+}
+
+/* TABLET PORTRAIT (768px and below) */
+/* Hide left sidebar, use drawer navigation, reduce right panel */
+@media (max-width: 768px) {
+  :root {
+    /* Layout: 2-column (center + right only) */
+    --layout-left-width: 0;               /* Hide left sidebar (use drawer) */
+    --layout-center-min-width: 150px;     /* Minimum center space */
+    --layout-right-width: 200px;          /* Small right panel */
+    --layout-right-min-width: 150px;      /* Minimum right width */
+    --layout-right-max-width: 400px;      /* Max right width */
+    
+    /* Navigation */
+    --navbar-height: 44px;                /* Reduce navbar from 48px */
+    
+    /* Spacing: reduce padding for compact layout */
+    --spacing-xs: 3px;
+    --spacing-sm: 6px;
+    --spacing-md: 10px;
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-2xl: 24px;
+    
+    /* Typography: slightly smaller for mobile */
+    --font-size-xs: 10px;
+    --font-size-sm: 11px;
+    --font-size-base: 12px;
+    --font-size-md: 13px;
+    --font-size-lg: 14px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 20px;
+    
+    /* Panel padding: more compact */
+    --panel-padding-horizontal: 12px;
+  }
+}
+
+/* MOBILE (480px and below) */
+/* Single column layout: full-width center, no sidebars */
+@media (max-width: 480px) {
+  :root {
+    /* Layout: single column (center only) */
+    --layout-left-width: 0;               /* Hide left sidebar */
+    --layout-center-min-width: 100%;      /* Full width center */
+    --layout-right-width: 0;              /* Hide right panel */
+    --layout-right-min-width: 0;
+    --layout-right-max-width: 0;
+    --divider-width: 0;                   /* No dividers */
+    
+    /* Navigation: minimal height */
+    --navbar-height: 40px;
+    
+    /* Spacing: very compact for small screens */
+    --spacing-xs: 2px;
+    --spacing-sm: 4px;
+    --spacing-md: 8px;
+    --spacing-lg: 10px;
+    --spacing-xl: 14px;
+    --spacing-2xl: 18px;
+    
+    /* Typography: minimal text sizing */
+    --font-size-xs: 9px;
+    --font-size-sm: 10px;
+    --font-size-base: 11px;
+    --font-size-md: 12px;
+    --font-size-lg: 13px;
+    --font-size-xl: 16px;
+    --font-size-2xl: 18px;
+    
+    /* Icon sizes: smaller for touch */
+    --icon-size-sm: 4px;
+    --icon-size-md: 10px;
+    --icon-size-button-sm: 16px;
+    --icon-size-button-md: 20px;
+    --icon-size-button-lg: 24px;
+    
+    /* Scrollbar: thinner on mobile */
+    --scrollbar-width: 6px;
+    
+    /* Panel padding: minimal */
+    --panel-padding-horizontal: 8px;
+    
+    /* Radius: slightly sharper on small screens */
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 4px;
+  }
 }
 
 /* ========================================
