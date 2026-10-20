@@ -180,3 +180,4 @@ vault est toujours `~/.myteamhub/vault`.
   Aucun ne teste `web/`, `proxy-llm/` ni `orchestrator/`.
 - **Dossiers historiques** : `server/`, `ui/` et `data/prompts/` (non
   référencé par le code actuel).
+
